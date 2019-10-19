@@ -22,16 +22,60 @@ background_clouds = pygame.image.load("CloudsFinal.jpg")
 gameDisplay.fill(white)
 gameDisplay.blit(background_clouds,[0,0])
 
+pygame.draw.rect(gameDisplay, light_yellow, (0, 0, 1275, 60))
+
 pygame.display.update()
 
 FPS=30
 clock=pygame.time.Clock()
 
-smallfont = pygame.font.SysFont("comicsansms",20)
+smallfont = pygame.font.SysFont("comicsansms", 25)
+medfont = pygame.font.SysFont("comicsansms", 50)
+largefont = pygame.font.SysFont("comicsansms", 80)
+
+
+def text_objects(msg, color, size="small"):
+    # the below statement added just to prevent error local variable used before refernce
+    textSurface = smallfont.render(msg, True, color)
+
+    if size == "small":
+        textSurface = smallfont.render(msg, True, color)
+    elif size == "meduim":
+        textSurface = medfont.render(msg, True, color)
+    elif size == "large":
+        textSurface = largefont.render(msg, True, color)
+    return textSurface, textSurface.get_rect()
+
+
+def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight,size="small"):
+    textSurf, textRect = text_objects(msg,color,size)
+    textRect.center = ((buttonx+(buttonwidth/2)),(buttony+(buttonheight/2)))
+    gameDisplay.blit(textSurf,textRect)
+
+
+def button(text,x,y,width,height,inactive_color,active_color, action = None):
+    cur = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    # click has tuple containing 3 elements. first one left click,second one mouse scroll, third one right click
+
+    if x + width > cur[0] > x and y + height > cur[1] > y:
+        pygame.draw.rect(gameDisplay,active_color,(x,y,width,height))
+        if click[0] == 1 and action != None:
+
+            if action=="quit":
+                pygame.quit()
+                quit()
+
+            if action=="chat":
+                chat_box()
+
+    else:
+        pygame.draw.rect(gameDisplay,inactive_color,(x,y,width,height))
+
+    text_to_button(text,black,x,y,width,height)
 
 def chat_box():
 
-    pygame.draw.rect(gameDisplay,black,(0,0,1275,58))
     pygame.display.update()
 
     current_string = []
@@ -54,8 +98,6 @@ def chat_box():
                 elif event.key <= 127:
                     current_string.append(chr(event.key))
 
-            pygame.draw.rect(gameDisplay, light_grey, (2, 2, 1271, 26))
-            pygame.draw.rect(gameDisplay,light_grey,(2,30,1271,26))
             output = "".join(current_string)
             text = smallfont.render(output, True, black)
             gameDisplay.blit(text, [3, 29])
@@ -74,10 +116,10 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 gameExit = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_t:
-                    chat_box()
+                pass
 
 
+        button("Chat",1200,11,60,40,red,light_red)
         pygame.display.update()
 
         clock.tick(FPS)
