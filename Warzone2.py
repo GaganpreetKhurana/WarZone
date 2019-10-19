@@ -18,11 +18,9 @@ yellow = (200,200,0)
 light_yellow = (255,255,0)
 
 gameDisplay = pygame.display.set_mode((1275,650))
-background_clouds = pygame.image.load("CloudsFinal.jpg")
+background_clouds = pygame.image.load("Background.png")
 gameDisplay.fill(white)
 gameDisplay.blit(background_clouds,[0,0])
-
-pygame.draw.rect(gameDisplay, light_yellow, (0, 0, 1275, 60))
 
 pygame.display.update()
 
@@ -119,7 +117,7 @@ def gameLoop():
                 pass
 
 
-        button("Chat",1200,11,60,40,red,light_red)
+        button("Chat",1200,11,60,40,yellow,light_yellow)
         pygame.display.update()
 
         clock.tick(FPS)
