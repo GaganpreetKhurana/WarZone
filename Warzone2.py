@@ -31,6 +31,14 @@ smallfont = pygame.font.SysFont("comicsansms", 25)
 medfont = pygame.font.SysFont("comicsansms", 50)
 largefont = pygame.font.SysFont("comicsansms", 80)
 
+# to clear the text printed on the screen after 5 seconds
+def chat_screen_update():
+    gameDisplay.fill(white)
+    gameDisplay.blit(background_clouds, [0, 0])
+    button("Chat", 1200, 11, 60, 40, yellow, light_yellow)
+
+    # bande bhi yahan update honge taaki purana text overwrite ho jaaye
+
 
 def text_objects(msg, color, size="small"):
     # the below statement added just to prevent error local variable used before refernce
@@ -74,6 +82,7 @@ def button(text,x,y,width,height,inactive_color,active_color, action = None):
 
 def chat_box():
 
+    chat_screen_update()
     pygame.display.update()
 
     current_string = []
@@ -98,8 +107,13 @@ def chat_box():
 
             output = "".join(current_string)
             text = smallfont.render(output, True, black)
-            gameDisplay.blit(text, [3, 29])
+            chat_screen_update()
+            gameDisplay.blit(text, [20, 29])
             pygame.display.update()
+
+    print("out of loop")
+    pygame.time.wait(5000)
+    chat_screen_update()
 
 
 def gameLoop():
@@ -117,7 +131,7 @@ def gameLoop():
                 pass
 
 
-        button("Chat",1200,11,60,40,yellow,light_yellow)
+        button("Chat",1200,11,60,40,yellow,light_yellow,action="chat")
         pygame.display.update()
 
         clock.tick(FPS)
