@@ -20,11 +20,13 @@ print("Waiting for a connection")
 
 currentId = "0"
 pos = ["0:50,50", "1:100,100"]
+chat= ""
 
 def threaded_client(conn):
-    global currentId, pos
+    global currentId, pos,chat
     conn.send(str.encode(currentId))
     currentId = "1"
+    chat="0:"
     reply = ''
     while True:
         try:
@@ -34,18 +36,22 @@ def threaded_client(conn):
                 conn.send(str.encode("Goodbye"))
                 break
             else:
-                print("Recieved: " + reply)
-                arr = reply.split(":")
-                id = int(arr[0])
-                pos[id] = reply
+                if len(reply)>2:
+                    print("Recieved: " + reply)
+                    chat = reply
 
-                if id == 0: nid = 1
-                if id == 1: nid = 0
+                # arr = reply.split(":")
+                # id = int(arr[0])
+                # chat[id] = reply
 
-                reply = pos[nid][:]
-                print("Sending: " + reply)
+                #if id == 0: nid = 1
+                #if id == 1: nid = 0
 
-            conn.sendall(str.encode(reply))
+
+                if len(reply)>2: print("Sending: " + chat)
+
+            conn.sendall(str.encode(chat))
+
         except:
             break
 

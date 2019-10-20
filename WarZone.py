@@ -5,32 +5,37 @@ from Network import network
 
 pygame.init()
 
+net = network()
+
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (200, 0, 0)
-light_red = (255,0,0)
-light_grey = (220,220,220)
+light_red = (255, 0, 0)
+light_grey = (220, 220, 220)
 
-green = (0,155, 0)
-light_green = (0,255,0)
+green = (0, 155, 0)
+light_green = (0, 255, 0)
 
-yellow = (200,200,0)
-light_yellow = (255,255,0)
+yellow = (200, 200, 0)
+light_yellow = (255, 255, 0)
 
-gameDisplay = pygame.display.set_mode((1275,650))
+gameDisplay = pygame.display.set_mode((1275, 640))
 background_clouds = pygame.image.load("Background.png")
 gameDisplay.fill(white)
-gameDisplay.blit(background_clouds,[0,0])
+gameDisplay.blit(background_clouds, [0, 0])
 
 pygame.display.update()
 
-FPS=30
-clock=pygame.time.Clock()
+FPS = 30
+clock = pygame.time.Clock()
 
 smallfont = pygame.font.SysFont("comicsansms", 25)
 medfont = pygame.font.SysFont("comicsansms", 50)
 largefont = pygame.font.SysFont("comicsansms", 80)
 
+chatStr = ""
+printchat=""
+printchatcheck=""
 # to clear the text printed on the screen after 5 seconds
 def chat_screen_update():
     gameDisplay.fill(white)
@@ -53,35 +58,35 @@ def text_objects(msg, color, size="small"):
     return textSurface, textSurface.get_rect()
 
 
-def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight,size="small"):
-    textSurf, textRect = text_objects(msg,color,size)
-    textRect.center = ((buttonx+(buttonwidth/2)),(buttony+(buttonheight/2)))
-    gameDisplay.blit(textSurf,textRect)
+def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size="small"):
+    textSurf, textRect = text_objects(msg, color, size)
+    textRect.center = ((buttonx + (buttonwidth / 2)), (buttony + (buttonheight / 2)))
+    gameDisplay.blit(textSurf, textRect)
 
 
-def button(text,x,y,width,height,inactive_color,active_color, action = None):
+def button(text, x, y, width, height, inactive_color, active_color, action=None):
     cur = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     # click has tuple containing 3 elements. first one left click,second one mouse scroll, third one right click
 
     if x + width > cur[0] > x and y + height > cur[1] > y:
-        pygame.draw.rect(gameDisplay,active_color,(x,y,width,height))
+        pygame.draw.rect(gameDisplay, active_color, (x, y, width, height))
         if click[0] == 1 and action != None:
 
-            if action=="quit":
+            if action == "quit":
                 pygame.quit()
                 quit()
 
-            if action=="chat":
+            if action == "chat":
                 chat_box()
 
     else:
-        pygame.draw.rect(gameDisplay,inactive_color,(x,y,width,height))
+        pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
 
-    text_to_button(text,black,x,y,width,height)
+    text_to_button(text, black, x, y, width, height)
+
 
 def chat_box():
-
     chat_screen_update()
     pygame.display.update()
 
@@ -111,8 +116,21 @@ def chat_box():
             gameDisplay.blit(text, [20, 29])
             pygame.display.update()
 
-    pygame.time.wait(5000)
-    chat_screen_update()
+        # Send Network Stuff
+
+    global chatStr
+    chatStr = output
+
+
+def send_data(output):
+    """
+    Send position to server
+    :return: None
+    """
+    data = str(net.id)+ ":" + output
+    reply = net.send(data)
+
+    return reply[2:]
 
 
 def gameLoop():
@@ -129,13 +147,32 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 pass
 
+        button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
 
-        button("Chat",1200,11,60,40,yellow,light_yellow,action="chat")
+        global chatStr,printchat,printchatcheck
+        reply = send_data(chatStr)
+        if reply!=printchatcheck:
+            printchat=reply
+
+        if len(printchat)>0:
+            text = smallfont.render(printchat, True, black)
+            printchatcheck=printchat
+
+            gameDisplay.blit(text, [20, 29])
+            pygame.display.update()
+
+            pygame.time.wait(5000)
+            chatStr = ""
+            printchat=""
+            #print("DONE")
+            chat_screen_update()
+
         pygame.display.update()
 
         clock.tick(FPS)
 
     pygame.quit()
     quit()
+
 
 gameLoop()
