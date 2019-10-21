@@ -34,8 +34,10 @@ medfont = pygame.font.SysFont("comicsansms", 50)
 largefont = pygame.font.SysFont("comicsansms", 80)
 
 chatStr = ""
-printchat=""
-printchatcheck=""
+printchat = ""
+printchatcheck = ""
+
+
 # to clear the text printed on the screen after 5 seconds
 def chat_screen_update():
     gameDisplay.fill(white)
@@ -121,13 +123,32 @@ def chat_box():
     global chatStr
     chatStr = output
 
+def chating():
+    global chatStr, printchat, printchatcheck
+    reply = send_data(chatStr)
+    if reply != printchatcheck:
+        printchat = reply
+
+    if len(printchat) > 0:
+        text = smallfont.render(printchat, True, black)
+        printchatcheck = printchat
+
+        gameDisplay.blit(text, [20, 29])
+        pygame.display.update()
+
+        pygame.time.wait(5000)
+        chatStr = ""
+        printchat = ""
+        # print("DONE")
+        chat_screen_update()
+
 
 def send_data(output):
     """
     Send position to server
     :return: None
     """
-    data = str(net.id)+ ":" + output
+    data = str(net.id) + ":" + output
     reply = net.send(data)
 
     return reply[2:]
@@ -149,23 +170,7 @@ def gameLoop():
 
         button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
 
-        global chatStr,printchat,printchatcheck
-        reply = send_data(chatStr)
-        if reply!=printchatcheck:
-            printchat=reply
-
-        if len(printchat)>0:
-            text = smallfont.render(printchat, True, black)
-            printchatcheck=printchat
-
-            gameDisplay.blit(text, [20, 29])
-            pygame.display.update()
-
-            pygame.time.wait(5000)
-            chatStr = ""
-            printchat=""
-            #print("DONE")
-            chat_screen_update()
+        chating()
 
         pygame.display.update()
 
