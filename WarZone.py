@@ -1,11 +1,11 @@
 import pygame
 import time
 
-#from Network import network
+from Network import network
 
 pygame.init()
 
-#net = network()
+net = network()
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -266,7 +266,7 @@ def gameLoop():
 
         button("Chat", 1180, 11, 80, 40, yellow, light_yellow, action="chat")
         
-        #chating()
+        chating()
 
         pygame.display.update()
 
