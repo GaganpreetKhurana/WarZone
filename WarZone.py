@@ -1,11 +1,11 @@
 import pygame
 import time
 
-from Network import network
+#from Network import network
 
 pygame.init()
 
-net = network()
+#net = network()
 
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -18,11 +18,15 @@ light_green = (0, 255, 0)
 
 yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
+blue=(32,139,185)
+light_blue=(0,0,255)
 
-gameDisplay = pygame.display.set_mode((1275, 640))
+gameDisplay = pygame.display.set_mode((1280, 640))
 background_clouds = pygame.image.load("Background.png")
-gameDisplay.fill(white)
-gameDisplay.blit(background_clouds, [0, 0])
+pygame.display.set_caption("WAR ZONE")
+icon=pygame.image.load("log.png")
+pygame.display.set_icon(icon)
+img=pygame.image.load('guiii.png')
 
 pygame.display.update()
 
@@ -36,6 +40,12 @@ largefont = pygame.font.SysFont("comicsansms", 80)
 chatStr = ""
 printchat = ""
 printchatcheck = ""
+
+def message_to_screen(msg,color,y_displace=0,size="small"):
+    
+    textsurf, textRect=text_objects(msg,color,size)
+    textRect.center=(640,200+y_displace)
+    gameDisplay.blit(textsurf,textRect)
 
 
 # to clear the text printed on the screen after 5 seconds
@@ -64,6 +74,45 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth / 2)), (buttony + (buttonheight / 2)))
     gameDisplay.blit(textSurf, textRect)
+def helps():
+    print("hi")
+    helps=True
+    while helps:
+        gameDisplay.fill(green)
+        message_to_screen("HELP",red,-100,"large")
+        message_to_screen("SHOOT AND KILL THE ENEMY ",black,0,"small")
+        message_to_screen("PRESS SPACEBAR TO JUMP",black,80,"small")
+        message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ",black,160,"small")
+        
+        
+        cur=pygame.mouse.get_pos()#it returns tuple of position of mouse on screen
+        click=pygame.mouse.get_pressed()#it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
+        if 130+150>cur[0]>130 and 535+50>cur[1]>535:
+            #to lighten the button when mouse is over it
+            pygame.draw.rect(gameDisplay,light_red,(130,535,150,50))
+            if click[0]==1:#that is on left click
+                game_intro()
+                
+        else:
+            pygame.draw.rect(gameDisplay,red,(130,535,150,50))
+        if 885+150>cur[0]>885 and 535+50>cur[1]>535:
+            pygame.draw.rect(gameDisplay,light_yellow,(885,535,150,50))
+            if click[0]==1:
+                gameLoop()
+        else:
+            pygame.draw.rect(gameDisplay,yellow,(885,535,150,50))
+
+
+        #to put text in the button 
+        text_to_button("BACK",black,130,535,150,50)
+        text_to_button("PLAY",black,885,535,150,50)
+        pygame.display.update()
+        for event in pygame.event.get():
+                if event.type ==pygame.QUIT:
+                    pygame.quit()
+                    quit()
+
+        clock.tick(15)
 
 
 def button(text, x, y, width, height, inactive_color, active_color, action=None):
@@ -81,6 +130,8 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
             if action == "chat":
                 chat_box()
+            if action=="pause":
+                pause()
 
     else:
         pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
@@ -154,10 +205,55 @@ def send_data(output):
     return reply[2:]
 
 
+def game_intro():
+    intro=True
+    while intro:
+    
+        
+        gameDisplay.fill(white)
+        gameDisplay.blit(img,[0,0])
+        cur=pygame.mouse.get_pos()#it returns tuple of position of mouse on screen
+        click=pygame.mouse.get_pressed()#it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
+        if 842+150>cur[0]>842 and 291+50>cur[1]>291:
+            #to lighten the button when mouse is over it
+            pygame.draw.rect(gameDisplay,light_red,(842,291,150,50))
+            if click[0]==1:#that is on left click
+                gameLoop()
+        else:
+            pygame.draw.rect(gameDisplay,red,(842,291,150,50))
+        if 842+150>cur[0]>842 and 372+50>cur[1]>372:
+            pygame.draw.rect(gameDisplay,light_yellow,(842,372,150,50))
+            if click[0]==1:
+                helps()
+        else:
+            pygame.draw.rect(gameDisplay,yellow,(842,372,150,50))
+        if 842+150>cur[0]>842 and 456+50>cur[1]>456:
+            pygame.draw.rect(gameDisplay,light_blue,(842,456,150,50))
+            if click[0]==1:
+                pygame.quit()
+                #to quit pygame
+                quit()
+        else:
+            pygame.draw.rect(gameDisplay,blue,(842,456,150,50))
+        
+
+        #to put text in the button 
+        text_to_button("PLAY",black,842,291,150,50)
+        text_to_button("HELP",black,842,372,150,50)
+        text_to_button("QUIT",black,842,456,150,50)
+        
+        pygame.display.update()
+        for event in pygame.event.get():
+                if event.type ==pygame.QUIT:
+                    pygame.quit()
+                    quit()
+        clock.tick(15)
 def gameLoop():
     # to be able to modify direction
 
     # Event Handling
+    gameDisplay.fill(white)
+    gameDisplay.blit(background_clouds,[0,0])
     gameExit = False
 
     while not gameExit:
@@ -168,9 +264,9 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 pass
 
-        button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
-
-        chating()
+        button("Chat", 1180, 11, 80, 40, yellow, light_yellow, action="chat")
+        
+        #chating()
 
         pygame.display.update()
 
@@ -179,5 +275,5 @@ def gameLoop():
     pygame.quit()
     quit()
 
+game_intro()
 
-gameLoop()
