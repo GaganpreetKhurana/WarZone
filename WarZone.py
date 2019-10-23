@@ -20,6 +20,7 @@ yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
 blue=(32,139,185)
 light_blue=(0,0,255)
+pause=False
 
 gameDisplay = pygame.display.set_mode((1280, 640))
 background_clouds = pygame.image.load("Background.png")
@@ -78,7 +79,6 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
 
 
 def helps():
-    print("hi")
     helps=True
     while helps:
         gameDisplay.fill(green)
@@ -119,6 +119,7 @@ def helps():
 
 
 def button(text, x, y, width, height, inactive_color, active_color, action=None):
+    global pause
     cur = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     # click has tuple containing 3 elements. first one left click,second one mouse scroll, third one right click
@@ -133,8 +134,11 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
             if action == "chat":
                 chat_box()
-            if action=="pause":
-                pause()
+            if action=="paused":
+                pause=True
+                paused()
+            if action=="unpause":
+                unpause()
 
     else:
         pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
@@ -210,6 +214,31 @@ def send_data(output):
 
     return reply[2:]
 
+def unpause():
+    global pause
+    pause=False
+    
+
+def paused():
+    largetext=pygame.font.SysFont("comicsansms",115)
+    textsurf,textrect=text_objects("PAUSED",red,"large")
+    textrect.center=((630),(200))
+    gameDisplay.blit(textsurf,textrect)
+    
+    while pause:
+        for event in pygame.event.get():
+            if event.type==pygame.QUIT:
+                pygame.quit()
+                quit()
+        #gameDisplay.fill(white)
+
+        #message_to_screen("PAUSED",red,-100,"large")
+        button("CONTINUE",300,372,150,50,red,light_red,action="unpause")
+        button("QUIT",842,372,150,50,blue,light_blue,action="quit")
+        
+        pygame.display.update()
+        clock.tick(15)
+
 
 def game_intro():
     intro=True
@@ -282,7 +311,7 @@ def gameLoop():
                 pass
 
         button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
-        
+        button("PAUSE",1180,55,80,40,red,light_red,action="paused")
         chating()
         chatWithPlay()
 
