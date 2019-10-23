@@ -231,7 +231,6 @@ def paused():
                 pygame.quit()
                 quit()
         #gameDisplay.fill(white)
-
         #message_to_screen("PAUSED",red,-100,"large")
         button("CONTINUE",300,372,150,50,red,light_red,action="unpause")
         button("QUIT",842,372,150,50,blue,light_blue,action="quit")
