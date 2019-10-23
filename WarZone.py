@@ -40,6 +40,7 @@ largefont = pygame.font.SysFont("comicsansms", 80)
 chatStr = ""
 printchat = ""
 printchatcheck = ""
+FPScount=0
 
 def message_to_screen(msg,color,y_displace=0,size="small"):
     
@@ -74,6 +75,8 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth / 2)), (buttony + (buttonheight / 2)))
     gameDisplay.blit(textSurf, textRect)
+
+
 def helps():
     print("hi")
     helps=True
@@ -169,29 +172,32 @@ def chat_box():
             gameDisplay.blit(text, [20, 29])
             pygame.display.update()
 
-        # Send Network Stuff
+        # Send Network Stuff- yahan opposition player ki position update karni padegi
 
     global chatStr
     chatStr = output
 
 def chating():
-    global chatStr, printchat, printchatcheck
+    global chatStr, printchat, printchatcheck,FPScount
     reply = send_data(chatStr)
     if reply != printchatcheck:
         printchat = reply
+        FPScount=0
 
-    if len(printchat) > 0:
+    if FPScount<=151: FPScount += 1
+
+    if len(printchat) > 0 and FPScount==1:
         text = smallfont.render(printchat, True, black)
         printchatcheck = printchat
 
         gameDisplay.blit(text, [20, 29])
         pygame.display.update()
 
-        pygame.time.wait(5000)
-        chatStr = ""
-        printchat = ""
-        # print("DONE")
-        chat_screen_update()
+        # pygame.time.wait(5000)
+        # chatStr = ""
+        # printchat = ""
+        # # print("DONE")
+        # chat_screen_update()
 
 
 def send_data(output):
@@ -247,7 +253,18 @@ def game_intro():
                 if event.type ==pygame.QUIT:
                     pygame.quit()
                     quit()
-        clock.tick(15)
+        clock.tick(30)
+
+def chatWithPlay():
+    global chatStr, printchat, printchatcheck, FPScount
+
+    if FPScount == 150:
+        chatStr = ""
+        printchat = ""
+        # print("DONE")
+        chat_screen_update()
+
+
 def gameLoop():
     # to be able to modify direction
 
@@ -264,9 +281,10 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 pass
 
-        button("Chat", 1180, 11, 80, 40, yellow, light_yellow, action="chat")
+        button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
         
         chating()
+        chatWithPlay()
 
         pygame.display.update()
 
