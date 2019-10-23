@@ -238,6 +238,8 @@ def paused():
         
         pygame.display.update()
         clock.tick(15)
+    else:
+        chat_screen_update()
 
 
 def game_intro():
