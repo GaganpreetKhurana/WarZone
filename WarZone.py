@@ -54,8 +54,9 @@ def message_to_screen(msg,color,y_displace=0,size="small"):
 def chat_screen_update():
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
-    button("Chat", 1200, 11, 60, 40, yellow, light_yellow)
-
+    button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
+    button("PAUSE",1180,55,90,40,red,light_red,action="paused")
+        
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
 
@@ -231,6 +232,7 @@ def paused():
                 pygame.quit()
                 quit()
         #gameDisplay.fill(white)
+
         #message_to_screen("PAUSED",red,-100,"large")
         button("CONTINUE",300,372,150,50,red,light_red,action="unpause")
         button("QUIT",842,372,150,50,blue,light_blue,action="quit")
@@ -311,8 +313,8 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 pass
 
-        button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
-        button("PAUSE",1180,55,80,40,red,light_red,action="paused")
+        button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
+        button("PAUSE",1180,55,90,40,red,light_red,action="paused")
         chating()
         chatWithPlay()
 
