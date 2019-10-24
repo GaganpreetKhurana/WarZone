@@ -20,6 +20,7 @@ yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
 blue = (32, 139, 185)
 light_blue = (0, 0, 255)
+pause = False
 
 gameDisplay = pygame.display.set_mode((1280, 640))
 background_clouds = pygame.image.load("Background.png")
@@ -27,6 +28,7 @@ pygame.display.set_caption("WAR ZONE")
 icon = pygame.image.load("log.png")
 pygame.display.set_icon(icon)
 img = pygame.image.load('guiii.png')
+timer_button = pygame.image.load("Timer_button.png")
 
 pygame.display.update()
 
@@ -41,7 +43,9 @@ chatStr = ""
 printchat = ""
 printchatcheck = ""
 FPScount = 0
-
+time_str=""
+prev=""
+start_tick = 0
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
     textsurf, textRect = text_objects(msg, color, size)
@@ -53,8 +57,10 @@ def message_to_screen(msg, color, y_displace=0, size="small"):
 def chat_screen_update():
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
-    button("Chat", 1200, 11, 60, 40, yellow, light_yellow)
-
+    button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
+    button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
+    gameDisplay.blit(timer_button,[580, 10])
+    text_to_button(time_str, black, 623, 24, 30, 30,'medium')
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
 
@@ -78,7 +84,6 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
 
 
 def helps():
-    print("hi")
     helps = True
     while helps:
         gameDisplay.fill(green)
@@ -117,6 +122,7 @@ def helps():
 
 
 def button(text, x, y, width, height, inactive_color, active_color, action=None):
+    global pause
     cur = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     # click has tuple containing 3 elements. first one left click,second one mouse scroll, third one right click
@@ -131,8 +137,11 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
             if action == "chat":
                 chat_box()
-            if action == "pause":
-                pause()
+            if action == "paused":
+                pause = True
+                paused()
+            if action == "unpause":
+                unpause()
 
     else:
         pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
@@ -166,6 +175,7 @@ def chat_box():
 
             output = "".join(current_string)
             text = smallfont.render(output, True, black)
+            timer(start_tick)
             chat_screen_update()
             gameDisplay.blit(text, [20, 29])
             pygame.display.update()
@@ -208,6 +218,38 @@ def send_data(output):
     reply = net.send(data)
 
     return reply[2:]
+
+
+def unpause():
+    global pause
+    pause = False
+
+
+def paused():
+    largetext = pygame.font.SysFont("comicsansms", 115)
+    textsurf, textrect = text_objects("PAUSED", red, "large")
+    textrect.center = ((630), (200))
+    gameDisplay.blit(textsurf, textrect)
+    timeadd=0
+    global start_tick
+    while pause:
+        timeadd += 1
+        if timeadd%15==0:
+            start_tick += 1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        # gameDisplay.fill(white)
+
+        # message_to_screen("PAUSED",red,-100,"large")
+        button("CONTINUE", 300, 372, 150, 50, red, light_red, action="unpause")
+        button("QUIT", 842, 372, 150, 50, blue, light_blue, action="quit")
+
+        pygame.display.update()
+        clock.tick(15)
+    else:
+        chat_screen_update()
 
 
 def game_intro():
@@ -262,6 +304,22 @@ def chatWithPlay():
         # print("DONE")
         chat_screen_update()
 
+def timer(start_tick):
+    time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
+    min,sec = divmod(time_left,60)
+
+    if sec<10:
+        sec = '0' + str(int(sec))
+    else:
+        sec = str(int(sec))
+    global time_str,prev
+
+    time_str = "0" + str(int(min)) + ":" + sec
+    if time_str != prev:
+        gameDisplay.blit(timer_button, [580, 10])
+        text_to_button(time_str, black, 623, 24, 30, 30, 'medium')
+        #chat_screen_update()
+    prev = time_str
 
 def gameLoop():
     # to be able to modify direction
@@ -271,6 +329,9 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
+    global start_tick
+    start_tick = pygame.time.get_ticks()
+
     while not gameExit:
 
         for event in pygame.event.get():
@@ -279,7 +340,10 @@ def gameLoop():
             if event.type == pygame.KEYDOWN:
                 pass
 
-        button("Chat", 1200, 11, 60, 40, yellow, light_yellow, action="chat")
+        button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
+        button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
+
+        timer(start_tick)
 
         chating()
         chatWithPlay()
