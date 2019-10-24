@@ -43,9 +43,10 @@ chatStr = ""
 printchat = ""
 printchatcheck = ""
 FPScount = 0
-time_str=""
-prev=""
+time_str = ""
+prev = ""
 start_tick = 0
+
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
     textsurf, textRect = text_objects(msg, color, size)
@@ -59,8 +60,8 @@ def chat_screen_update():
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
     button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
-    gameDisplay.blit(timer_button,[580, 10])
-    text_to_button(time_str, black, 623, 24, 30, 30,'medium')
+    gameDisplay.blit(timer_button, [580, 10])
+    text_to_button(time_str, black, 623, 24, 30, 30, 'medium')
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
 
@@ -129,7 +130,7 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
     if x + width > cur[0] > x and y + height > cur[1] > y:
         pygame.draw.rect(gameDisplay, active_color, (x, y, width, height))
-        if click[0] == 1 and action != None:
+        if click[0] == 1 and action is not None:
 
             if action == "quit":
                 pygame.quit()
@@ -228,13 +229,13 @@ def unpause():
 def paused():
     largetext = pygame.font.SysFont("comicsansms", 115)
     textsurf, textrect = text_objects("PAUSED", red, "large")
-    textrect.center = ((630), (200))
+    textrect.center = (630, 200)
     gameDisplay.blit(textsurf, textrect)
-    timeadd=0
+    timeadd = 0
     global start_tick
     while pause:
         timeadd += 1
-        if timeadd%15==0:
+        if timeadd % 15 == 0:
             start_tick += 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -304,22 +305,24 @@ def chatWithPlay():
         # print("DONE")
         chat_screen_update()
 
+
 def timer(start_tick):
     time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
-    min,sec = divmod(time_left,60)
+    min, sec = divmod(time_left, 60)
 
-    if sec<10:
+    if sec < 10:
         sec = '0' + str(int(sec))
     else:
         sec = str(int(sec))
-    global time_str,prev
+    global time_str, prev
 
     time_str = "0" + str(int(min)) + ":" + sec
     if time_str != prev:
         gameDisplay.blit(timer_button, [580, 10])
         text_to_button(time_str, black, 623, 24, 30, 30, 'medium')
-        #chat_screen_update()
+        # chat_screen_update()
     prev = time_str
+
 
 def gameLoop():
     # to be able to modify direction
@@ -357,4 +360,3 @@ def gameLoop():
 
 
 game_intro()
-

@@ -7,7 +7,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server = socket.gethostbyname(socket.gethostname())
 port = 5555
 
-#server_ip = socket.gethostbyname(server)
+# server_ip = socket.gethostbyname(server)
 
 try:
     s.bind((server, port))
@@ -20,13 +20,14 @@ print("Waiting for a connection")
 
 currentId = "0"
 pos = ["0:50,50", "1:100,100"]
-chat= ""
+chat = ""
+
 
 def threaded_client(conn):
-    global currentId, pos,chat
+    global currentId, pos, chat
     conn.send(str.encode(currentId))
     currentId = "1"
-    chat="0:"
+    chat = "0:"
     reply = ''
     while True:
         try:
@@ -36,7 +37,7 @@ def threaded_client(conn):
                 conn.send(str.encode("Goodbye"))
                 break
             else:
-                if len(reply)>2:
+                if len(reply) > 2:
                     print("Recieved: " + reply)
                     chat = reply
 
@@ -44,11 +45,10 @@ def threaded_client(conn):
                 # id = int(arr[0])
                 # chat[id] = reply
 
-                #if id == 0: nid = 1
-                #if id == 1: nid = 0
+                # if id == 0: nid = 1
+                # if id == 1: nid = 0
 
-
-                if len(reply)>2: print("Sending: " + chat)
+                if len(reply) > 2: print("Sending: " + chat)
 
             conn.sendall(str.encode(chat))
 
@@ -57,6 +57,7 @@ def threaded_client(conn):
 
     print("Connection Closed")
     conn.close()
+
 
 while True:
     conn, addr = s.accept()
