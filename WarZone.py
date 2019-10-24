@@ -154,7 +154,7 @@ def chat_box():
     pygame.display.update()
 
     current_string = []
-
+    output = ""
     writing = True
     while writing:
         for event in pygame.event.get():
@@ -173,8 +173,8 @@ def chat_box():
                 elif event.key <= 127:
                     current_string.append(chr(event.key))
 
-            output = "".join(current_string)
-            text = smallfont.render(output, True, black)
+        output = "".join(current_string)
+        text = smallfont.render(output, True, black)
         timer(start_tick)
         chat_screen_update()
         gameDisplay.blit(text, [20, 29])
