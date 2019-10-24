@@ -175,10 +175,10 @@ def chat_box():
 
             output = "".join(current_string)
             text = smallfont.render(output, True, black)
-            timer(start_tick)
-            chat_screen_update()
-            gameDisplay.blit(text, [20, 29])
-            pygame.display.update()
+        timer(start_tick)
+        chat_screen_update()
+        gameDisplay.blit(text, [20, 29])
+        pygame.display.update()
 
         # Send Network Stuff- yahan opposition player ki position update karni padegi
 
