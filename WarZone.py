@@ -327,9 +327,11 @@ def timer(start_tick):
     prev = time_str
 
 
-def player_draw(player_x, player_y,image):
+def player_draw(player_x, player_y, image, mirror=False):
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
+    if mirror:
+        image = pygame.transform.flip(image, True, False)
     gameDisplay.blit(image, [player_x - 16, player_y])
 
 
@@ -430,6 +432,9 @@ def gameLoop():
     x_change = 0
     y_change = 0
 
+    opponent_X = 1248
+    opponent_Y = 400
+
     global start_tick
     start_tick = pygame.time.get_ticks()
 
@@ -438,8 +443,8 @@ def gameLoop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
-        keys = pygame.key.get_pressed()  #movements
-        if keys[pygame.K_UP] and air_stay_count == 0:
+        keys = pygame.key.get_pressed()  # movements
+        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0:
             direction["up"] = 1
             air_stay_count = 32
         if keys[pygame.K_LEFT]:
@@ -459,7 +464,7 @@ def gameLoop():
         chatting()
         chatWithPlay()
 
-        if air_stay_count > 16: #for staying in air/loop
+        if air_stay_count > 16:  # for staying in air/loop
             air_stay_count -= 1
             y_change = -8
             direction["up"] = 1
@@ -471,7 +476,7 @@ def gameLoop():
             direction["up"] = 0
 
         x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                  direction) #obstacles
+                                                                  direction)  # obstacles
         if playerY + y_change >= 576:  # boundary checks
             air_stay_count = 0
             y_change = 0
@@ -499,7 +504,9 @@ def gameLoop():
         direction["left"] = 0
 
         chat_screen_update()
-        player_draw(playerX, playerY,player_1)
+        # send_confirmation=send_data(str(playerX)+":"+str(playerY))
+        player_draw(playerX, playerY, player_1)
+        player_draw(opponent_X, opponent_Y, player_1, True)
         pygame.display.update()
 
         clock.tick(FPS)
