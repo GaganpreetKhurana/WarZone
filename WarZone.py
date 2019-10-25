@@ -106,8 +106,10 @@ def helps():
         gameDisplay.fill(green)
         message_to_screen("HELP", red, -100, "large")
         message_to_screen("SHOOT AND KILL THE ENEMY ", black, 0, "small")
-        message_to_screen("PRESS SPACEBAR TO JUMP", black, 80, "small")
-        message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 160, "small")
+        message_to_screen("PRESS SPACEBAR TO JUMP", black, 60, "small")
+        message_to_screen("HEALTH BARS CONSTANTLY KEEPS A CHECK ON YOUR HEALTH AS WELL AS YOUR ENEMY'S HEALTH", black, 120, "small")
+        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF TOTAL KILLS TO TOTAL DEATHS", black, 180, "small")
+        message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 240, "small")
 
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
         click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
