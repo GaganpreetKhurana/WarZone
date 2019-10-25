@@ -16,6 +16,12 @@ light_grey = (220, 220, 220)
 green = (0, 155, 0)
 light_green = (0, 255, 0)
 
+
+#different colours for health bar
+gren=(0,200,0)
+yelow=(100,100,0)
+rde=(200,0,0)
+
 yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
 blue = (32, 139, 185)
@@ -425,6 +431,26 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction):
                                                                    direction, 1248, 320, 32, 32)
     return x_change, y_change, air_stay_count, direction
 
+def health_bars(player_health,enemy_health):
+    if player_health >75:
+        player_health_color=gren
+    elif player_health >50:
+        player_health_color=yelow
+    else:
+        player_health_color=rde
+
+        
+    if enemy_health >75:
+        enemy_health_color=gren
+    elif enemy_health >50:
+        enemy_health_color=yelow
+    else:
+        enemy_health_color=rde
+    pygame.draw.rect(gameDisplay,player_health_color,(430,25,player_health,30))
+    pygame.draw.rect(gameDisplay,enemy_health_color,(750,25,enemy_health,30))
+                     
+    
+
 
 def gameLoop():
     # to be able to modify direction
@@ -433,6 +459,9 @@ def gameLoop():
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
+
+    player_health =100
+    enemy_health=100
 
     direction = {"right": 0, "left": 0, "up": 0, "down": 0}
     playerX = 32
@@ -514,6 +543,7 @@ def gameLoop():
 
         chat_screen_update()
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
+        health_bars(player_health,enemy_health)
         player_draw(playerX, playerY, player_1)
         player_draw(opponent_X, opponent_Y, player_1, True)
         pygame.display.update()
