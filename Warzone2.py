@@ -41,6 +41,8 @@ pygame.display.set_icon(icon)
 img = pygame.image.load('guiii.png')
 timer_button = pygame.image.load("Timer_button.png")
 player_1 = pygame.image.load("Player_1.png")
+bullet_right = pygame.image.load("bulletright.png")
+bullet_right = pygame.transform.smoothscale(bullet_right, (24, 24))
 
 pygame.display.update()
 
@@ -59,8 +61,8 @@ time_str = ""
 prev = ""
 start_tick = 0
 
-player_health=100
-enemy_health=100
+player_health = 100
+enemy_health = 100
 playerX = 32
 playerY = 400
 opponent_X = 1248
@@ -372,19 +374,22 @@ def player_draw(player_x, player_y, image, mirror=False):
     text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
     gameDisplay.blit(image, [player_x - 16, player_y])
-    #chat_screen_update()
+    # chat_screen_update()
 
 
-def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height):
-    if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + 32 + change_x <= obstacle_x + width:
-        if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + 64 + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + 64 or player_y <= obstacle_y + height <= player_y + 64:
+def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
+                   player_width=32, player_height=64):
+    if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
+        if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
+            if player_width == 24:
+                air_stay = True
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
-                change_x = obstacle_x - player_x - 32
+                change_x = obstacle_x - player_x - player_width
             elif direction["left"] and direction["up"] == 0 and direction["down"] == 0:
                 change_x -= obstacle_x + width - player_x
             elif direction["up"] == 0 and direction["down"] == 0:
-                if abs(obstacle_x - player_x - 32) < abs(obstacle_x + width - player_x):
-                    change_x = obstacle_x - player_x - 32
+                if abs(obstacle_x - player_x - player_width) < abs(obstacle_x + width - player_x):
+                    change_x = obstacle_x - player_x - player_width
                 else:
                     change_x = obstacle_x + width - player_x
             if direction["up"]:
@@ -405,55 +410,79 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
     return change_x, change_y, air_stay, direction
 
 
-def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction):
+def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=32, player_height=64):
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 128, 352, 32, 32)  # plank 2
+                                                                   direction, 128, 352, 32, 32, player_width,
+                                                                   player_height)  # plank 2
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 480, 512, 32)  # ground 1
+                                                                   direction, 0, 480, 512, 32, player_width,
+                                                                   player_height)  # ground 1
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 512, 480, 32)
+                                                                   direction, 0, 512, 480, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 544, 448, 32)
+                                                                   direction, 0, 544, 448, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 576, 416, 32)
+                                                                   direction, 0, 576, 416, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 608, 384, 32)
+                                                                   direction, 0, 608, 384, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 224, 288, 192, 32)  # plank 3
+                                                                   direction, 224, 288, 192, 32, player_width,
+                                                                   player_height)  # plank 3
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 256, 320, 128, 64)
+                                                                   direction, 256, 320, 128, 64, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 192, 128, 32)  # plank 1
+                                                                   direction, 0, 192, 128, 32, player_width,
+                                                                   player_height)  # plank 1
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 224, 96, 64)
+                                                                   direction, 0, 224, 96, 64, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 288, 64, 32)
+                                                                   direction, 0, 288, 64, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 320, 32, 32)
+                                                                   direction, 0, 320, 32, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 544, 224, 128, 96)  # plank 4
+                                                                   direction, 544, 224, 128, 96, player_width,
+                                                                   player_height)  # plank 4
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 800, 256, 128, 96)  # plank 5
+                                                                   direction, 800, 256, 128, 96, player_width,
+                                                                   player_height)  # plank 5
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 640, 480, 192, 32)  # ground 2
+                                                                   direction, 640, 480, 192, 32, player_width,
+                                                                   player_height)  # ground 2
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 672, 512, 128, 64)
+                                                                   direction, 672, 512, 128, 64, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 704, 576, 64, 32)
+                                                                   direction, 704, 576, 64, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 960, 480, 320, 160)  # ground 3
+                                                                   direction, 960, 480, 320, 160, player_width,
+                                                                   player_height)  # ground 3
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1120, 352, 32, 32)  # plank 7
+                                                                   direction, 1120, 352, 32, 32, player_width,
+                                                                   player_height)  # plank 7
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1056, 256, 32, 32)  # plank 6
+                                                                   direction, 1056, 256, 32, 32, player_width,
+                                                                   player_height)  # plank 6
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1152, 192, 128, 32)  # plank 8
+                                                                   direction, 1152, 192, 128, 32, player_width,
+                                                                   player_height)  # plank 8
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1184, 224, 96, 64)
+                                                                   direction, 1184, 224, 96, 64, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1216, 288, 64, 32)
+                                                                   direction, 1216, 288, 64, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 1248, 320, 32, 32)
+                                                                   direction, 1248, 320, 32, 32, player_width,
+                                                                   player_height)
     return x_change, y_change, air_stay_count, direction
 
 
@@ -475,7 +504,29 @@ def health_bars(player_health, enemy_health):
     pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
 
 
+def fire(playerY, face, move_fire, direc):
+    fire_bullet = True
+    if face == "left":
+        direc["left"] = 1
+        move_fire -= 16
+        if move_fire < 0:
+            fire_bullet = False
+        X, Y, air, direc = obstacles(move_fire, playerY + 32, -16, 0, 0, direc, 24, 24)
+    else:
+        direc["right"] = 1
+        move_fire += 16
+        if move_fire > 1280:
+            fire_bullet = False
+        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24, 24)
+    if air:
+        fire_bullet = False
+    # pygame.draw.circle(gameDisplay,light_green,(move_fire,playerY+24),12)
+    gameDisplay.blit(bullet_right, [move_fire - 12, playerY + 12])
+    return fire_bullet, move_fire
+
+
 def gameLoop():
+    global pause
     # to be able to modify direction
 
     # Event Handling
@@ -483,21 +534,28 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    global player_health,enemy_health
+    global player_health, enemy_health
     player_health = 100
     enemy_health = 100
 
     direction = {"right": 0, "left": 0, "up": 0, "down": 0}
 
-    global  playerX,playerY,opponent_X,opponent_Y
+    global playerX, playerY, opponent_X, opponent_Y
     playerX = 32
     playerY = 400
     air_stay_count = 0
     x_change = 0
     y_change = 0
-
+    face = "left"
     opponent_X = 1248
     opponent_Y = 400
+
+    move_fire = playerX  # firing
+    fire_y = playerY
+    fire_bullet = False
+    direc_fire = {"left": 0, "right": 0, "up": 0, "down": 0}
+    direc_fire_const = direc_fire
+    face_const = face
 
     global start_tick
     start_tick = pygame.time.get_ticks()
@@ -513,12 +571,23 @@ def gameLoop():
             air_stay_count = 32
         if keys[pygame.K_LEFT]:
             x_change = -4
+            face = "left"
             direction["left"] = 1
             direction["right"] = 0
         if keys[pygame.K_RIGHT]:
             x_change = +4
+            face = "right"
             direction["left"] = 0
             direction["right"] = 1
+        if keys[pygame.K_SPACE] and fire_bullet == False:
+            move_fire = playerX
+            fire_y = playerY
+            fire_bullet = True
+            direc_fire_const = direc_fire
+            face_const = face
+        if keys[pygame.K_p]:
+            pause = True
+            paused()
 
         button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
         button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
@@ -568,6 +637,8 @@ def gameLoop():
         direction["left"] = 0
 
         chat_screen_update()
+        if fire_bullet:
+            fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
         # health_bars(player_health, enemy_health)
         # player_draw(playerX, playerY, player_1)
@@ -578,5 +649,6 @@ def gameLoop():
 
     pygame.quit()
     quit()
+
 
 game_intro()
