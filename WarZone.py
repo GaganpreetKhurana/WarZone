@@ -22,6 +22,13 @@ blue = (32, 139, 185)
 light_blue = (0, 0, 255)
 pause = False
 
+
+hit1=0
+kill1=0
+font=pygame.font.SysFont('comicsans',40,True)
+
+
+
 display_width = 1280
 display_height = 640
 gameDisplay = pygame.display.set_mode((display_width, display_height))
@@ -332,6 +339,8 @@ def player_draw(player_x, player_y, image, mirror=False):
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
     if mirror:
         image = pygame.transform.flip(image, True, False)
+    text=font.render('Score  '+ str(hit1) + " : " + str(kill1) ,1,(0,0,0))
+    gameDisplay.blit(text,(0,20))
     gameDisplay.blit(image, [player_x - 16, player_y])
 
 
