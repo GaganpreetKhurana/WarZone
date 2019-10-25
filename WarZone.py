@@ -254,9 +254,13 @@ def send_data(output):
     if net.id == 0:
         opponent_X = int(arr[2][2:].split(',')[0])
         opponent_Y = int(arr[2][2:].split(',')[1])
+        playerX = int(arr[1][2:].split(',')[0])
+        playerY = int(arr[1][2:].split(',')[1])
     else:
         opponent_X = int(arr[1][2:].split(',')[0])
-        opponent_Y = int(arr[1][2:].split(',')[0])
+        opponent_Y = int(arr[1][2:].split(',')[1])
+        playerX = int(arr[2][2:].split(',')[0])
+        playerY = int(arr[2][2:].split(',')[1])
 
     reply = arr[0]
     return reply[2:]
