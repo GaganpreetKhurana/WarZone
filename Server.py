@@ -5,13 +5,12 @@ import sys
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 server = socket.gethostbyname(socket.gethostname())
-port = 5555
+port = 8888
 
 # server_ip = socket.gethostbyname(server)
 
 try:
     s.bind((server, port))
-
 except socket.error as e:
     print(str(e))
 
@@ -33,6 +32,11 @@ def threaded_client(conn):
         try:
             data = conn.recv(2048)
             reply = data.decode('utf-8')
+            id = int(reply[0])
+            arr = reply.split('?')
+            pos[id] = str(id)+":"+arr[1]
+            print(pos)
+            reply = arr[0]
             if not data:
                 conn.send(str.encode("Goodbye"))
                 break
@@ -50,7 +54,7 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            conn.sendall(str.encode(chat))
+            conn.sendall(str.encode(chat+'?'+str(pos[0])+'?'+str(pos[1])))
 
         except:
             break

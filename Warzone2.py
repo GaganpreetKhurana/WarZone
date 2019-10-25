@@ -77,6 +77,7 @@ def message_to_screen(msg, color, y_displace=0, size="small"):
 
 # to clear the text printed on the screen after 5 seconds
 def chat_screen_update():
+    global playerX,playerY,opponent_X,opponent_Y
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
@@ -245,11 +246,20 @@ def chatting():
 def send_data(output):
     """
     Send position to server
-    :return: None
+    return: None
     """
-    data = str(net.id) + ":" + output
+    global playerX,playerY,opponent_X,opponent_Y
+    data = str(net.id) + ":" + output +'?'+str(playerX)+','+str(playerY)
     reply = net.send(data)
+    arr = reply.split('?')
+    if net.id == 0:
+        opponent_X = int(arr[2][2:].split(',')[0])
+        opponent_Y = int(arr[2][2:].split(',')[1])
+    else:
+        opponent_X = int(arr[1][2:].split(',')[0])
+        opponent_Y = int(arr[1][2:].split(',')[0])
 
+    reply = arr[0]
     return reply[2:]
 
 
