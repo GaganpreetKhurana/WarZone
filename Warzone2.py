@@ -514,7 +514,7 @@ def health_bars(player_health, enemy_health):
         enemy_health_color = yelow
     else:
         enemy_health_color = rde
-    if net.id=='1':
+    if net.id=='0':
         pygame.draw.rect(gameDisplay, player_health_color, (430, 25, player_health, 30))
         pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
     else:
