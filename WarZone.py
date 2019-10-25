@@ -97,6 +97,7 @@ def chat_screen_update():
     health_bars(player_health, enemy_health)
     player_draw(playerX, playerY, player_1)
     player_draw(opponent_X, opponent_Y, player_1, True)
+    # gameDisplay.blit(bullet_right, opponent_bullet)
 
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
@@ -513,8 +514,12 @@ def health_bars(player_health, enemy_health):
         enemy_health_color = yelow
     else:
         enemy_health_color = rde
-    pygame.draw.rect(gameDisplay, player_health_color, (430, 25, player_health, 30))
-    pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
+    if net.id=='1':
+        pygame.draw.rect(gameDisplay, player_health_color, (430, 25, player_health, 30))
+        pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
+    else:
+        pygame.draw.rect(gameDisplay, player_health_color, (750, 25, player_health, 30))
+        pygame.draw.rect(gameDisplay, enemy_health_color, (430, 25, enemy_health, 30))
 
 
 def fire(playerY, face, move_fire, direc):
@@ -659,6 +664,26 @@ def gameLoop():
         chat_screen_update()
         if fire_bullet:
             fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
+
+            if face_const=="left":
+                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, -16, 0, 0, direc_fire_const, opponent_X,opponent_Y,32,32,24,24)
+            else:
+                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, 16, 0, 0, direc_fire_const, opponent_X,opponent_Y,32,64,24,24)
+            if temp_air:
+                fire_bullet=False
+                enemy_health-=10
+
+        #move_fire is X coordinate of players bullet
+        #playerY+32 is Y coordinate of player's bullet
+        #size is 24X24
+        #face_const is direction of player's bullet
+        #send mover_fire,playerY+32,face_const,player_health
+        if enemy_health==0:
+            pass
+            #gameOver
+        if player_health==0:
+            pass
+            #gameOver
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
         # health_bars(player_health, enemy_health)
         # player_draw(playerX, playerY, player_1)
