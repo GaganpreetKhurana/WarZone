@@ -251,7 +251,7 @@ def send_data(output):
     data = str(net.id) + ":" + output +'?'+str(playerX)+','+str(playerY)
     reply = net.send(data)
     arr = reply.split('?')
-    if net.id == 0:
+    if net.id == "0":
         opponent_X = int(arr[2][2:].split(',')[0])
         opponent_Y = int(arr[2][2:].split(',')[1])
         playerX = int(arr[1][2:].split(',')[0])
