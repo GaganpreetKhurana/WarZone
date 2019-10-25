@@ -243,11 +243,20 @@ def chatting():
 def send_data(output):
     """
     Send position to server
-    :return: None
+    return: None
     """
-    data = str(net.id) + ":" + output
+    global playerX,playerY,opponent_X,opponent_Y
+    data = str(net.id) + ":" + output +'?'+str(playerX)+','+str(playerY)
     reply = net.send(data)
+    arr = reply.split('?')
+    if net.id == 0:
+        opponent_X = int(arr[2][2:].split(',')[0])
+        opponent_Y = int(arr[2][2:].split(',')[1])
+    else:
+        opponent_X = int(arr[1][2:].split(',')[0])
+        opponent_Y = int(arr[1][2:].split(',')[0])
 
+    reply = arr[0]
     return reply[2:]
 
 
