@@ -16,11 +16,10 @@ light_grey = (220, 220, 220)
 green = (0, 155, 0)
 light_green = (0, 255, 0)
 
-
-#different colours for health bar
-gren=(0,200,0)
-yelow=(100,100,0)
-rde=(200,0,0)
+# different colours for health bar
+gren = (0, 200, 0)
+yelow = (100, 100, 0)
+rde = (200, 0, 0)
 
 yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
@@ -28,12 +27,9 @@ blue = (32, 139, 185)
 light_blue = (0, 0, 255)
 pause = False
 
-
-hit1=0
-kill1=0
-font=pygame.font.SysFont('comicsans',40,True)
-
-
+hit1 = 0
+kill1 = 0
+font = pygame.font.SysFont('comicsans', 40, True)
 
 display_width = 1280
 display_height = 640
@@ -63,6 +59,13 @@ time_str = ""
 prev = ""
 start_tick = 0
 
+player_health=100
+enemy_health=100
+playerX = 32
+playerY = 400
+opponent_X = 1248
+opponent_Y = 400
+
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
     textsurf, textRect = text_objects(msg, color, size)
@@ -77,7 +80,14 @@ def chat_screen_update():
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
     button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
     gameDisplay.blit(timer_button, [580, 10])
+    text = smallfont.render(printchat, True, black)
+    gameDisplay.blit(text, [20, 60])
+
     text_to_button(time_str, black, 623, 24, 30, 30, 'medium')
+    health_bars(player_health, enemy_health)
+    player_draw(playerX, playerY, player_1)
+    player_draw(opponent_X, opponent_Y, player_1, True)
+
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
 
@@ -107,8 +117,10 @@ def helps():
         message_to_screen("HELP", red, -100, "large")
         message_to_screen("SHOOT AND KILL THE ENEMY ", black, 0, "small")
         message_to_screen("PRESS SPACEBAR TO JUMP", black, 60, "small")
-        message_to_screen("HEALTH BARS CONSTANTLY KEEPS A CHECK ON YOUR HEALTH AS WELL AS YOUR ENEMY'S HEALTH", black, 120, "small")
-        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF TOTAL KILLS TO TOTAL DEATHS", black, 180, "small")
+        message_to_screen("HEALTH BARS CONSTANTLY KEEPS A CHECK ON YOUR HEALTH AS WELL AS YOUR ENEMY'S HEALTH", black,
+                          120, "small")
+        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF TOTAL KILLS TO TOTAL DEATHS", black, 180,
+                          "small")
         message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 240, "small")
 
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
@@ -196,7 +208,7 @@ def chat_box():
         text = smallfont.render(output, True, black)
         timer(start_tick)
         chat_screen_update()
-        gameDisplay.blit(text, [20, 29])
+        gameDisplay.blit(text, [20, 60])
         pygame.display.update()
 
         # Send Network Stuff- yahan opposition player ki position update karni padegi
@@ -218,7 +230,7 @@ def chatting():
         text = smallfont.render(printchat, True, black)
         printchatcheck = printchat
 
-        gameDisplay.blit(text, [20, 29])
+        gameDisplay.blit(text, [20, 60])
         pygame.display.update()
 
         # pygame.time.wait(5000)
@@ -347,9 +359,10 @@ def player_draw(player_x, player_y, image, mirror=False):
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
     if mirror:
         image = pygame.transform.flip(image, True, False)
-    text=font.render('Score  '+ str(hit1) + " : " + str(kill1) ,1,(0,0,0))
-    gameDisplay.blit(text,(0,20))
+    text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
+    gameDisplay.blit(text, (10, 20))
     gameDisplay.blit(image, [player_x - 16, player_y])
+    #chat_screen_update()
 
 
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height):
@@ -433,25 +446,23 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction):
                                                                    direction, 1248, 320, 32, 32)
     return x_change, y_change, air_stay_count, direction
 
-def health_bars(player_health,enemy_health):
-    if player_health >75:
-        player_health_color=gren
-    elif player_health >50:
-        player_health_color=yelow
-    else:
-        player_health_color=rde
 
-        
-    if enemy_health >75:
-        enemy_health_color=gren
-    elif enemy_health >50:
-        enemy_health_color=yelow
+def health_bars(player_health, enemy_health):
+    if player_health > 75:
+        player_health_color = gren
+    elif player_health > 50:
+        player_health_color = yelow
     else:
-        enemy_health_color=rde
-    pygame.draw.rect(gameDisplay,player_health_color,(430,25,player_health,30))
-    pygame.draw.rect(gameDisplay,enemy_health_color,(750,25,enemy_health,30))
-                     
-    
+        player_health_color = rde
+
+    if enemy_health > 75:
+        enemy_health_color = gren
+    elif enemy_health > 50:
+        enemy_health_color = yelow
+    else:
+        enemy_health_color = rde
+    pygame.draw.rect(gameDisplay, player_health_color, (430, 25, player_health, 30))
+    pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
 
 
 def gameLoop():
@@ -462,10 +473,13 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    player_health =100
-    enemy_health=100
+    global player_health,enemy_health
+    player_health = 100
+    enemy_health = 100
 
     direction = {"right": 0, "left": 0, "up": 0, "down": 0}
+
+    global  playerX,playerY,opponent_X,opponent_Y
     playerX = 32
     playerY = 400
     air_stay_count = 0
@@ -545,15 +559,14 @@ def gameLoop():
 
         chat_screen_update()
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
-        health_bars(player_health,enemy_health)
-        player_draw(playerX, playerY, player_1)
-        player_draw(opponent_X, opponent_Y, player_1, True)
+        # health_bars(player_health, enemy_health)
+        # player_draw(playerX, playerY, player_1)
+        # player_draw(opponent_X, opponent_Y, player_1, True)
         pygame.display.update()
 
         clock.tick(FPS)
 
     pygame.quit()
     quit()
-
 
 game_intro()
