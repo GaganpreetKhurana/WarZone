@@ -395,7 +395,7 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                    player_width=32, player_height=64):
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
-            if player_width == 24:
+            if player_width == 24 and player_height==24:
                 air_stay = True
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
                 change_x = obstacle_x - player_x - player_width
@@ -477,8 +477,20 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
                                                                    direction, 704, 576, 64, 32, player_width,
                                                                    player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 960, 480, 320, 160, player_width,
+                                                                   direction, 960, 480, 320, 32, player_width,
                                                                    player_height)  # ground 3
+    x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
+                                                                   direction, 992, 512, 288, 32, player_width,
+                                                                   player_height)
+    x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
+                                                                   direction, 1024, 544, 256, 32, player_width,
+                                                                   player_height)
+    x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
+                                                                   direction, 1056, 576, 224, 32, player_width,
+                                                                   player_height)
+    x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
+                                                                   direction, 1088, 608, 192, 32, player_width,
+                                                                   player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 1120, 352, 32, 32, player_width,
                                                                    player_height)  # plank 7
@@ -497,6 +509,7 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 1248, 320, 32, 32, player_width,
                                                                    player_height)
+
     return x_change, y_change, air_stay_count, direction
 
 
@@ -611,6 +624,7 @@ def gameLoop():
             direc_fire_const = direc_fire
             face_const = face
         if keys[pygame.K_p]:
+            pygame.draw.rect(gameDisplay, red, (1180, 55, 90, 40))
             pause = True
             paused()
 
@@ -680,10 +694,8 @@ def gameLoop():
         #send mover_fire,playerY+32,face_const,player_health
         if enemy_health==0:
             pass
-            #gameOver
         if player_health==0:
             pass
-            #gameOver
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
         # health_bars(player_health, enemy_health)
         # player_draw(playerX, playerY, player_1)
