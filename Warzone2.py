@@ -75,7 +75,6 @@ if net.id == '1':
     opponent_Y = 400
 
 
-
 def message_to_screen(msg, color, y_displace=0, size="small"):
     textsurf, textRect = text_objects(msg, color, size)
     textRect.center = (640, 200 + y_displace)
@@ -84,7 +83,6 @@ def message_to_screen(msg, color, y_displace=0, size="small"):
 
 # to clear the text printed on the screen after 5 seconds
 def chat_screen_update():
-
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
@@ -256,8 +254,8 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX,playerY,opponent_X,opponent_Y
-    data = str(net.id) + ":" + output +'?'+str(playerX)+','+str(playerY)
+    global playerX, playerY, opponent_X, opponent_Y
+    data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY)
     reply = net.send(data)
     arr = reply.split('?')
     if net.id == "0":
@@ -381,8 +379,8 @@ def timer(start_tick):
 def player_draw(player_x, player_y, image, mirror=False):
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
-    if net.id=='1':
-        mirror = not(mirror)
+    if net.id == '1':
+        mirror = not mirror
     if mirror:
         image = pygame.transform.flip(image, True, False)
     text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
@@ -395,7 +393,7 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                    player_width=32, player_height=64):
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
-            if player_width == 24 and player_height==24:
+            if player_width == 24 and player_height == 24:
                 air_stay = True
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
                 change_x = obstacle_x - player_x - player_width
@@ -527,7 +525,7 @@ def health_bars(player_health, enemy_health):
         enemy_health_color = yelow
     else:
         enemy_health_color = rde
-    if net.id=='0':
+    if net.id == '0':
         pygame.draw.rect(gameDisplay, player_health_color, (430, 25, player_health, 30))
         pygame.draw.rect(gameDisplay, enemy_health_color, (750, 25, enemy_health, 30))
     else:
@@ -679,22 +677,26 @@ def gameLoop():
         if fire_bullet:
             fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
 
-            if face_const=="left":
-                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, -16, 0, 0, direc_fire_const, opponent_X,opponent_Y,32,32,24,24)
+            if face_const == "left":
+                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, -16, 0, 0,
+                                                                                 direc_fire_const, opponent_X,
+                                                                                 opponent_Y, 32, 32, 24, 24)
             else:
-                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, 16, 0, 0, direc_fire_const, opponent_X,opponent_Y,32,64,24,24)
+                player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, 16, 0, 0,
+                                                                                 direc_fire_const, opponent_X,
+                                                                                 opponent_Y, 32, 64, 24, 24)
             if temp_air:
-                fire_bullet=False
-                enemy_health-=10
+                fire_bullet = False
+                enemy_health -= 10
 
-        #move_fire is X coordinate of players bullet
-        #playerY+32 is Y coordinate of player's bullet
-        #size is 24X24
-        #face_const is direction of player's bullet
-        #send mover_fire,playerY+32,face_const,player_health
-        if enemy_health==0:
+        # move_fire is X coordinate of players bullet
+        # playerY+32 is Y coordinate of player's bullet
+        # size is 24X24
+        # face_const is direction of player's bullet
+        # send mover_fire,playerY+32,face_const,player_health
+        if enemy_health == 0:
             pass
-        if player_health==0:
+        if player_health == 0:
             pass
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
         # health_bars(player_health, enemy_health)

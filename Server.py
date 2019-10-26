@@ -35,8 +35,8 @@ def threaded_client(conn):
             print(reply)
             id = int(reply[0])
             arr = reply.split('?')
-            pos[id] = str(id)+":"+arr[1]
-            #print(pos)
+            pos[id] = str(id) + ":" + arr[1]
+            # print(pos)
             reply = arr[0]
             if not data:
                 conn.send(str.encode("Goodbye"))
@@ -55,8 +55,8 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            #print(chat+'?'+str(pos[0])+'?'+str(pos[1]))
-            conn.sendall(str.encode(chat+'?'+str(pos[0])+'?'+str(pos[1])))
+            # print(chat+'?'+str(pos[0])+'?'+str(pos[1]))
+            conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1])))
 
         except:
             break
