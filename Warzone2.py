@@ -69,8 +69,8 @@ opponent_X = 1248
 opponent_Y = 400
 
 # size is 24X24
-player_bullet_x = playerX  # player_bullet_x is X coordinate of players bullet
-player_bullet_y = playerY  # player_bullet_y is Y coordinate of player's bullet
+player_bullet_x = 1285  # player_bullet_x is X coordinate of players bullet
+player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
 enemy_bullet_x = 1285
 enemy_bullet_y = 645
 bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
@@ -262,10 +262,13 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y,player_bullet_x,player_bullet_y,enemy_bullet_x,enemy_bullet_y
-    data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(player_bullet_x) + ',' + str(player_bullet_y)
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y
+    # print(enemy_bullet_x,enemy_bullet_y)
+    data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
+        player_bullet_x) + ',' + str(player_bullet_y)
     reply = net.send(data)
     arr = reply.split('?')
+
     if net.id == "0":
         opponent_X = int(arr[2][2:].split(',')[0])
         opponent_Y = int(arr[2][2:].split(',')[1])
@@ -703,7 +706,7 @@ def gameLoop():
         chat_screen_update()
         if fire_bullet:
             fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
-
+            player_bullet_x = move_fire
             if face_const == "left":
                 player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(move_fire, playerY + 32, -16, 0, 0,
                                                                                  direc_fire_const, opponent_X,
