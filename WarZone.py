@@ -68,6 +68,14 @@ playerY = 400
 opponent_X = 1248
 opponent_Y = 400
 
+# size is 24X24
+player_bullet_x = playerX  # player_bullet_x is X coordinate of players bullet
+player_bullet_y = playerY  # player_bullet_y is Y coordinate of player's bullet
+enemy_bullet_x = 1285
+enemy_bullet_y = 645
+bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
+bullet_direction_enemy = 'r'
+
 if net.id == '1':
     playerX = 1248
     playerY = 400
@@ -95,7 +103,7 @@ def chat_screen_update():
     health_bars(player_health, enemy_health)
     player_draw(playerX, playerY, player_1)
     player_draw(opponent_X, opponent_Y, player_1, True)
-    # gameDisplay.blit(bullet_right, opponent_bullet)
+    gameDisplay.blit(bullet_right, (enemy_bullet_x, enemy_bullet_y))
 
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
@@ -383,7 +391,10 @@ def player_draw(player_x, player_y, image, mirror=False):
         mirror = not mirror
     if mirror:
         image = pygame.transform.flip(image, True, False)
-    text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
+    if net.id == '1':
+        text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
+    else:
+        text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
     gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
@@ -563,7 +574,7 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    global player_health, enemy_health
+    global player_health, enemy_health, kill1, hit1
     player_health = 100
     enemy_health = 100
 
@@ -574,6 +585,8 @@ def gameLoop():
     playerY = 400
     opponent_X = 1248
     opponent_Y = 400
+
+    global player_bullet_x, player_bullet_y, bullet_direction_player
 
     if net.id == '1':
         playerX = 1248
@@ -621,6 +634,12 @@ def gameLoop():
             fire_bullet = True
             direc_fire_const = direc_fire
             face_const = face
+            if face_const == "right":
+                bullet_direction_player = 'r'
+            else:
+                bullet_direction_player = 'l'
+            player_bullet_x = move_fire - 12
+            player_bullet_y = playerY + 12
         if keys[pygame.K_p]:
             pygame.draw.rect(gameDisplay, red, (1180, 55, 90, 40))
             pause = True
@@ -651,7 +670,7 @@ def gameLoop():
             air_stay_count = 0
             y_change = 0
             playerY = 576
-            # game over
+            player_health = 0
         elif playerY + y_change <= 0:
             y_change = +8
             direction["up"] = 0
@@ -687,17 +706,31 @@ def gameLoop():
                                                                                  opponent_Y, 32, 64, 24, 24)
             if temp_air:
                 fire_bullet = False
+                player_bullet_x = 1285
+                player_bullet_y = 645
                 enemy_health -= 10
+        if not fire_bullet:
+            player_bullet_x = 1285
+            player_bullet_y = 645
 
-        # move_fire is X coordinate of players bullet
-        # playerY+32 is Y coordinate of player's bullet
-        # size is 24X24
-        # face_const is direction of player's bullet
-        # send mover_fire,playerY+32,face_const,player_health
         if enemy_health == 0:
-            pass
+            kill1 += 1
+            enemy_health = 100
+            if net.id == '1':
+                opponent_X = 32
+                opponent_Y = 400
+            else:
+                opponent_X = 1248
+                opponent_Y = 400
         if player_health == 0:
-            pass
+            hit1 += 1
+            player_health = 100
+            if net.id == '0':
+                playerX = 32
+                playerY = 400
+            else:
+                playerX = 1248
+                playerY = 400
         # send_confirmation=send_data(str(playerX)+":"+str(playerY))
         # health_bars(player_health, enemy_health)
         # player_draw(playerX, playerY, player_1)
