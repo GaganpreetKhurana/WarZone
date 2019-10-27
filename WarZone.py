@@ -262,20 +262,28 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y
-    data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY)
+    global playerX, playerY, opponent_X, opponent_Y,player_bullet_x,player_bullet_y,enemy_bullet_x,enemy_bullet_y
+    data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(player_bullet_x) + ',' + str(player_bullet_y)
     reply = net.send(data)
     arr = reply.split('?')
     if net.id == "0":
         opponent_X = int(arr[2][2:].split(',')[0])
         opponent_Y = int(arr[2][2:].split(',')[1])
+        enemy_bullet_x = int(arr[2][2:].split(',')[2])
+        enemy_bullet_y = int(arr[2][2:].split(',')[3])
         playerX = int(arr[1][2:].split(',')[0])
         playerY = int(arr[1][2:].split(',')[1])
+        player_bullet_x = int(arr[1][2:].split(',')[2])
+        player_bullet_y = int(arr[1][2:].split(',')[3])
     else:
         opponent_X = int(arr[1][2:].split(',')[0])
         opponent_Y = int(arr[1][2:].split(',')[1])
+        enemy_bullet_x = int(arr[1][2:].split(',')[2])
+        enemy_bullet_y = int(arr[1][2:].split(',')[3])
         playerX = int(arr[2][2:].split(',')[0])
         playerY = int(arr[2][2:].split(',')[1])
+        player_bullet_x = int(arr[2][2:].split(',')[2])
+        player_bullet_y = int(arr[2][2:].split(',')[3])
 
     reply = arr[0]
     return reply[2:]

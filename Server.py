@@ -18,7 +18,7 @@ s.listen(2)
 print("Waiting for a connection")
 
 currentId = "0"
-pos = ["0:32,400", "1:1248,400"]
+pos = ["0:32,400,30,400", "1:1248,400,1248,400"]
 chat = ""
 
 
@@ -61,7 +61,7 @@ def threaded_client(conn):
         except:
             break
 
-    pos = ["0:32,400", "1:1248,400"]
+    pos = ["0:32,400,30,400", "1:1248,400,1248,400"]
     currentId = "0"
     print("Connection Closed")
     conn.close()
