@@ -60,6 +60,7 @@ FPScount = 0
 time_str = ""
 prev = ""
 start_tick = 0
+timer_count = 0
 
 player_health = 100
 enemy_health = 100
@@ -262,12 +263,13 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y,timer_count
     # print(enemy_bullet_x,enemy_bullet_y)
     data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
         player_bullet_x) + ',' + str(player_bullet_y)
     reply = net.send(data)
     arr = reply.split('?')
+    timer_count = int(arr[3])
 
     if net.id == "0":
         opponent_X = int(arr[2][2:].split(',')[0])
@@ -305,9 +307,9 @@ def paused():
     timeadd = 0
     global start_tick
     while pause:
-        timeadd += 1
-        if timeadd % 15 == 0:
-            start_tick += 1000
+        #timeadd += 1
+        #if timeadd % 15 == 0:
+         #   start_tick += 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -659,6 +661,8 @@ def gameLoop():
         button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
         button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
 
+        if timer_count<2:
+            start_tick = pygame.time.get_ticks()
         timer(start_tick)
 
         chatting()

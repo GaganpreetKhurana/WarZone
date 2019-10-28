@@ -20,20 +20,23 @@ print("Waiting for a connection")
 currentId = "0"
 pos = ["0:32,400,30,400", "1:1248,400,1248,400"]
 chat = ""
-
+count = 0
 
 def threaded_client(conn):
-    global currentId, pos, chat
+    global currentId, pos, chat,count
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
     reply = ''
+
     while True:
         try:
             data = conn.recv(2048)
             reply = data.decode('utf-8')
             print(reply)
             id = int(reply[0])
+            if id == 1:
+                count = 2
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
             # print(pos)
@@ -55,14 +58,15 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            # print(chat+'?'+str(pos[0])+'?'+str(pos[1]))
-            conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1])))
+            #print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
+            conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count)))
 
         except:
             break
 
     pos = ["0:32,400,30,400", "1:1248,400,1248,400"]
     currentId = "0"
+    count = 0
     print("Connection Closed")
     conn.close()
 
@@ -70,5 +74,4 @@ def threaded_client(conn):
 while True:
     conn, addr = s.accept()
     print("Connected to: ", addr)
-
     start_new_thread(threaded_client, (conn,))
