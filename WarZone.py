@@ -81,13 +81,19 @@ player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
 enemy_bullet_x = 1285
 enemy_bullet_y = 645
 bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
-bullet_direction_enemy = 'r'
+bullet_direction_enemy = 'l'
+player_direction ='r'
+enemy_direction = 'l'
 
 if net.id == '1':
     playerX = 1248
     playerY = 400
     opponent_X = 32
     opponent_Y = 400
+    player_direction = 'l'
+    enemy_direction = 'r'
+    bullet_direction_enemy = 'r'
+    bullet_direction_player = 'l'
 
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
@@ -269,10 +275,10 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y,timer_count
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y,timer_count,player_direction,enemy_direction
     # print(enemy_bullet_x,enemy_bullet_y)
     data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
-        player_bullet_x) + ',' + str(player_bullet_y)
+        player_bullet_x) + ',' + str(player_bullet_y) + ',' + str(player_direction)
     reply = net.send(data)
     arr = reply.split('?')
     timer_count = int(arr[3])
@@ -282,19 +288,23 @@ def send_data(output):
         opponent_Y = int(arr[2][2:].split(',')[1])
         enemy_bullet_x = int(arr[2][2:].split(',')[2])
         enemy_bullet_y = int(arr[2][2:].split(',')[3])
+        enemy_direction = (arr[2][2:].split(',')[4])
         playerX = int(arr[1][2:].split(',')[0])
         playerY = int(arr[1][2:].split(',')[1])
         player_bullet_x = int(arr[1][2:].split(',')[2])
         player_bullet_y = int(arr[1][2:].split(',')[3])
+        player_direction = (arr[1][2:].split(',')[4])
     else:
         opponent_X = int(arr[1][2:].split(',')[0])
         opponent_Y = int(arr[1][2:].split(',')[1])
         enemy_bullet_x = int(arr[1][2:].split(',')[2])
         enemy_bullet_y = int(arr[1][2:].split(',')[3])
+        enemy_direction = (arr[1][2:].split(',')[4])
         playerX = int(arr[2][2:].split(',')[0])
         playerY = int(arr[2][2:].split(',')[1])
         player_bullet_x = int(arr[2][2:].split(',')[2])
         player_bullet_y = int(arr[2][2:].split(',')[3])
+        player_direction = (arr[2][2:].split(',')[4])
 
     reply = arr[0]
     return reply[2:]
@@ -713,7 +723,7 @@ def gameLoop():
     direc_fire_const = direc_fire
     face_const = face
 
-    global start_tick
+    global start_tick,player_direction,enemy_direction,bullet_direction_player,bullet_direction_enemy
     start_tick = pygame.time.get_ticks()
 
     while not gameExit:

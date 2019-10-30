@@ -27,13 +27,13 @@ blue = (32, 139, 185)
 light_blue = (0, 0, 255)
 pause = False
 
-#for player 1
-hit1=0
-kill1=0
-#for player 2
-hit2=0
-kill2=0
-font=pygame.font.SysFont('comicsans',40,True)
+# for player 1
+hit1 = 0
+kill1 = 0
+# for player 2
+hit2 = 0
+kill2 = 0
+font = pygame.font.SysFont('comicsans', 40, True)
 time_left = int(300)
 
 display_width = 1280
@@ -81,13 +81,19 @@ player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
 enemy_bullet_x = 1285
 enemy_bullet_y = 645
 bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
-bullet_direction_enemy = 'r'
+bullet_direction_enemy = 'l'
+player_direction = 'r'
+enemy_direction = 'l'
 
 if net.id == '1':
     playerX = 1248
     playerY = 400
     opponent_X = 32
     opponent_Y = 400
+    player_direction = 'l'
+    enemy_direction = 'r'
+    bullet_direction_enemy = 'r'
+    bullet_direction_player = 'l'
 
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
@@ -269,10 +275,10 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y,timer_count
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y, timer_count, player_direction, enemy_direction
     # print(enemy_bullet_x,enemy_bullet_y)
     data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
-        player_bullet_x) + ',' + str(player_bullet_y)
+        player_bullet_x) + ',' + str(player_bullet_y) + ',' + str(player_direction)
     reply = net.send(data)
     arr = reply.split('?')
     timer_count = int(arr[3])
@@ -282,19 +288,23 @@ def send_data(output):
         opponent_Y = int(arr[2][2:].split(',')[1])
         enemy_bullet_x = int(arr[2][2:].split(',')[2])
         enemy_bullet_y = int(arr[2][2:].split(',')[3])
+        enemy_direction = (arr[2][2:].split(',')[4])
         playerX = int(arr[1][2:].split(',')[0])
         playerY = int(arr[1][2:].split(',')[1])
         player_bullet_x = int(arr[1][2:].split(',')[2])
         player_bullet_y = int(arr[1][2:].split(',')[3])
+        player_direction = (arr[1][2:].split(',')[4])
     else:
         opponent_X = int(arr[1][2:].split(',')[0])
         opponent_Y = int(arr[1][2:].split(',')[1])
         enemy_bullet_x = int(arr[1][2:].split(',')[2])
         enemy_bullet_y = int(arr[1][2:].split(',')[3])
+        enemy_direction = (arr[1][2:].split(',')[4])
         playerX = int(arr[2][2:].split(',')[0])
         playerY = int(arr[2][2:].split(',')[1])
         player_bullet_x = int(arr[2][2:].split(',')[2])
         player_bullet_y = int(arr[2][2:].split(',')[3])
+        player_direction = (arr[2][2:].split(',')[4])
 
     reply = arr[0]
     return reply[2:]
@@ -313,9 +323,9 @@ def paused():
     timeadd = 0
     global start_tick
     while pause:
-        #timeadd += 1
-        #if timeadd % 15 == 0:
-         #   start_tick += 1000
+        # timeadd += 1
+        # if timeadd % 15 == 0:
+        #   start_tick += 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -340,51 +350,50 @@ def game_over():
     game_over = True
     while game_over:
 
-
         gameDisplay.fill(white)
         gameDisplay.blit(img1, [0, 0])
-        if int(hit1)>int(hit2):
-            
+        if int(hit1) > int(hit2):
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
 
             textsurf, textrect = text_objects("YOU WON", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect.center = (957,277)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
-            textrect.center = (957,327)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textrect.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
 
-        elif int(hit1)<int(hit2):
-            
+        elif int(hit1) < int(hit2):
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
             textsurf, textrect = text_objects("YOU LOSE", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect1.center = (957,327)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect1.center = (957, 327)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   -"+str(kill2),black,"small")
-            textrect2.center = (957,277)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   -" + str(kill2), black, "small")
+            textrect2.center = (957, 277)
             gameDisplay.blit(textsurf2, textrect2)
         else:
-            
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
             textsurf, textrect = text_objects("TIE", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect1.center = (957,277)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
-            textrect2.center = (957,327)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
-        
+
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
         click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
         if 770 + 170 > cur[0] > 770 and 560 + 50 > cur[1] > 560:
@@ -399,7 +408,7 @@ def game_over():
             if click[0] == 1:
                 pygame.quit()
                 # to quit pygame
-                quit() 
+                quit()
         else:
             pygame.draw.rect(gameDisplay, yellow, (1010, 560, 170, 50))
 
@@ -413,7 +422,6 @@ def game_over():
                 pygame.quit()
                 quit()
         clock.tick(30)
-
 
 
 def game_intro():
@@ -473,8 +481,8 @@ def timer(start_tick):
     global time_left
     time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
-    if int(min)==int(0) and int(sec)==int(0):
-        #print("helllllo")
+    if int(min) == int(0) and int(sec) == int(0):
+        # print("helllllo")
         game_over()
 
     if sec < 10:
@@ -713,7 +721,7 @@ def gameLoop():
     direc_fire_const = direc_fire
     face_const = face
 
-    global start_tick
+    global start_tick, player_direction, enemy_direction, bullet_direction_player, bullet_direction_enemy
     start_tick = pygame.time.get_ticks()
 
     while not gameExit:
@@ -755,7 +763,7 @@ def gameLoop():
         button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
         button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
 
-        if timer_count<2:
+        if timer_count < 2:
             start_tick = pygame.time.get_ticks()
         timer(start_tick)
 
