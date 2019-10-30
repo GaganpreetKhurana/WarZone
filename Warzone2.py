@@ -27,9 +27,14 @@ blue = (32, 139, 185)
 light_blue = (0, 0, 255)
 pause = False
 
-hit1 = 0
-kill1 = 0
-font = pygame.font.SysFont('comicsans', 40, True)
+#for player 1
+hit1=0
+kill1=0
+#for player 2
+hit2=0
+kill2=0
+font=pygame.font.SysFont('comicsans',40,True)
+time_left = int(300)
 
 display_width = 1280
 display_height = 640
@@ -39,6 +44,7 @@ pygame.display.set_caption("WAR ZONE")
 icon = pygame.image.load("log.png")
 pygame.display.set_icon(icon)
 img = pygame.image.load('guiii.png')
+img1 = pygame.image.load('game1.png')
 timer_button = pygame.image.load("Timer_button.png")
 player_1 = pygame.image.load("Player_1.png")
 bullet_right = pygame.image.load("bulletright.png")
@@ -326,6 +332,90 @@ def paused():
         chat_screen_update()
 
 
+def game_over():
+    global hit1
+    global kill1
+    global hit2
+    global kill2
+    game_over = True
+    while game_over:
+
+
+        gameDisplay.fill(white)
+        gameDisplay.blit(img1, [0, 0])
+        if int(hit1)>int(hit2):
+            
+            largetext = pygame.font.SysFont("comicsansms", 90)
+            smalltext=pygame.font.SysFont("comicsansms",50)
+
+            textsurf, textrect = text_objects("YOU WON", red, "large")
+            textrect.center = (957,177)
+            gameDisplay.blit(textsurf, textrect)
+            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
+            textrect.center = (957,277)
+            gameDisplay.blit(textsurf1, textrect1)
+            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
+            textrect.center = (957,327)
+            gameDisplay.blit(textsurf2, textrect2)
+
+        elif int(hit1)<int(hit2):
+            
+            largetext = pygame.font.SysFont("comicsansms", 90)
+            smalltext=pygame.font.SysFont("comicsansms",50)
+            textsurf, textrect = text_objects("YOU LOSE", red, "large")
+            textrect.center = (957,177)
+            gameDisplay.blit(textsurf, textrect)
+            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
+            textrect1.center = (957,327)
+            gameDisplay.blit(textsurf1, textrect1)
+            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   -"+str(kill2),black,"small")
+            textrect2.center = (957,277)
+            gameDisplay.blit(textsurf2, textrect2)
+        else:
+            
+            largetext = pygame.font.SysFont("comicsansms", 90)
+            smalltext=pygame.font.SysFont("comicsansms",50)
+            textsurf, textrect = text_objects("TIE", red, "large")
+            textrect.center = (957,177)
+            gameDisplay.blit(textsurf, textrect)
+            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
+            textrect1.center = (957,277)
+            gameDisplay.blit(textsurf1, textrect1)
+            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
+            textrect2.center = (957,327)
+            gameDisplay.blit(textsurf2, textrect2)
+        
+        cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
+        click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
+        if 770 + 170 > cur[0] > 770 and 560 + 50 > cur[1] > 560:
+            # to lighten the button when mouse is over it
+            pygame.draw.rect(gameDisplay, light_red, (770, 560, 170, 50))
+            if click[0] == 1:  # that is on left click
+                gameLoop()
+        else:
+            pygame.draw.rect(gameDisplay, red, (770, 560, 170, 50))
+        if 1010 + 170 > cur[0] > 1010 and 560 + 50 > cur[1] > 560:
+            pygame.draw.rect(gameDisplay, light_yellow, (1010, 560, 170, 50))
+            if click[0] == 1:
+                pygame.quit()
+                # to quit pygame
+                quit() 
+        else:
+            pygame.draw.rect(gameDisplay, yellow, (1010, 560, 170, 50))
+
+        # to put text in the button
+        text_to_button("PLAY AGAIN", black, 770, 560, 170, 50)
+        text_to_button("QUIT", black, 1010, 560, 170, 50)
+
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        clock.tick(30)
+
+
+
 def game_intro():
     intro = True
     while intro:
@@ -380,8 +470,12 @@ def chatWithPlay():
 
 
 def timer(start_tick):
+    global time_left
     time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
+    if int(min)==int(0) and int(sec)==int(0):
+        #print("helllllo")
+        game_over()
 
     if sec < 10:
         sec = '0' + str(int(sec))
