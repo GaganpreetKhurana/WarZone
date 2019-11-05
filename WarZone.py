@@ -27,13 +27,13 @@ blue = (32, 139, 185)
 light_blue = (0, 0, 255)
 pause = False
 
-#for player 1
-hit1=0
-kill1=0
-#for player 2
-hit2=0
-kill2=0
-font=pygame.font.SysFont('comicsans',40,True)
+# for player 1
+hit1 = 0
+kill1 = 0
+# for player 2
+hit2 = 0
+kill2 = 0
+font = pygame.font.SysFont('comicsans', 40, True)
 time_left = int(300)
 
 display_width = 1280
@@ -82,8 +82,9 @@ enemy_bullet_x = 1285
 enemy_bullet_y = 645
 bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
 bullet_direction_enemy = 'l'
-player_direction ='r'
+player_direction = 'r'
 enemy_direction = 'l'
+air=False
 
 if net.id == '1':
     playerX = 1248
@@ -275,7 +276,7 @@ def send_data(output):
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y,timer_count,player_direction,enemy_direction
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y, timer_count, player_direction, enemy_direction
     # print(enemy_bullet_x,enemy_bullet_y)
     data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
         player_bullet_x) + ',' + str(player_bullet_y) + ',' + str(player_direction)
@@ -323,9 +324,9 @@ def paused():
     timeadd = 0
     global start_tick
     while pause:
-        #timeadd += 1
-        #if timeadd % 15 == 0:
-         #   start_tick += 1000
+        # timeadd += 1
+        # if timeadd % 15 == 0:
+        #   start_tick += 1000
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -350,51 +351,50 @@ def game_over():
     game_over = True
     while game_over:
 
-
         gameDisplay.fill(white)
         gameDisplay.blit(img1, [0, 0])
-        if int(hit1)>int(hit2):
-            
+        if int(hit1) > int(hit2):
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
 
             textsurf, textrect = text_objects("YOU WON", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect.center = (957,277)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
-            textrect.center = (957,327)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textrect.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
 
-        elif int(hit1)<int(hit2):
-            
+        elif int(hit1) < int(hit2):
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
             textsurf, textrect = text_objects("YOU LOSE", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect1.center = (957,327)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect1.center = (957, 327)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   -"+str(kill2),black,"small")
-            textrect2.center = (957,277)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   -" + str(kill2), black, "small")
+            textrect2.center = (957, 277)
             gameDisplay.blit(textsurf2, textrect2)
         else:
-            
+
             largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext=pygame.font.SysFont("comicsansms",50)
+            smalltext = pygame.font.SysFont("comicsansms", 50)
             textsurf, textrect = text_objects("TIE", red, "large")
-            textrect.center = (957,177)
+            textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1,textrect1=text_objects("PLAYER 1 :"+" + "+str(hit1)+"   - "+str(kill1),black,"small")
-            textrect1.center = (957,277)
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2,textrect2=text_objects("PLAYER 2 :"+" + "+str(hit2)+"   - "+str(kill2),black,"small")
-            textrect2.center = (957,327)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
-        
+
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
         click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
         if 770 + 170 > cur[0] > 770 and 560 + 50 > cur[1] > 560:
@@ -409,7 +409,7 @@ def game_over():
             if click[0] == 1:
                 pygame.quit()
                 # to quit pygame
-                quit() 
+                quit()
         else:
             pygame.draw.rect(gameDisplay, yellow, (1010, 560, 170, 50))
 
@@ -423,7 +423,6 @@ def game_over():
                 pygame.quit()
                 quit()
         clock.tick(30)
-
 
 
 def game_intro():
@@ -483,8 +482,8 @@ def timer(start_tick):
     global time_left
     time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
-    if int(min)==int(0) and int(sec)==int(0):
-        #print("helllllo")
+    if int(min) == int(0) and int(sec) == int(0):
+        # print("helllllo")
         game_over()
 
     if sec < 10:
@@ -521,6 +520,8 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                    player_width=32, player_height=64):
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
+            global air
+
             if player_width == 24 and player_height == 24:
                 air_stay = True
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
@@ -545,6 +546,7 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                     direction["up"] = 0
                     direction["down"] = 0
                     air_stay = 0
+                    air=False
                 if air_stay != 0:
                     change_x = 0
     return change_x, change_y, air_stay, direction
@@ -723,7 +725,7 @@ def gameLoop():
     direc_fire_const = direc_fire
     face_const = face
 
-    global start_tick,player_direction,enemy_direction,bullet_direction_player,bullet_direction_enemy
+    global start_tick, player_direction, enemy_direction, bullet_direction_player, bullet_direction_enemy,air
     start_tick = pygame.time.get_ticks()
 
     while not gameExit:
@@ -732,9 +734,10 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 gameExit = True
         keys = pygame.key.get_pressed()  # movements
-        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0:
+        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air==False:
             direction["up"] = 1
             air_stay_count = 32
+            air=True
         if keys[pygame.K_LEFT]:
             x_change = -4
             face = "left"
@@ -765,7 +768,7 @@ def gameLoop():
         button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
         button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
 
-        if timer_count<2:
+        if timer_count < 2:
             start_tick = pygame.time.get_ticks()
         timer(start_tick)
 

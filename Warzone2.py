@@ -84,6 +84,7 @@ bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
 bullet_direction_enemy = 'l'
 player_direction = 'r'
 enemy_direction = 'l'
+air=False
 
 if net.id == '1':
     playerX = 1248
@@ -519,6 +520,8 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                    player_width=32, player_height=64):
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
+            global air
+
             if player_width == 24 and player_height == 24:
                 air_stay = True
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
@@ -543,6 +546,7 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                     direction["up"] = 0
                     direction["down"] = 0
                     air_stay = 0
+                    air=False
                 if air_stay != 0:
                     change_x = 0
     return change_x, change_y, air_stay, direction
@@ -721,7 +725,7 @@ def gameLoop():
     direc_fire_const = direc_fire
     face_const = face
 
-    global start_tick, player_direction, enemy_direction, bullet_direction_player, bullet_direction_enemy
+    global start_tick, player_direction, enemy_direction, bullet_direction_player, bullet_direction_enemy,air
     start_tick = pygame.time.get_ticks()
 
     while not gameExit:
@@ -730,9 +734,10 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 gameExit = True
         keys = pygame.key.get_pressed()  # movements
-        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0:
+        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air==False:
             direction["up"] = 1
             air_stay_count = 32
+            air=True
         if keys[pygame.K_LEFT]:
             x_change = -4
             face = "left"
