@@ -21,9 +21,11 @@ currentId = "0"
 pos = ["0:32,400,30,400,r", "1:1248,400,1248,400,l"]
 chat = ""
 count = 0
+zeroStart = 0
+oneStart = 0
 
 def threaded_client(conn):
-    global currentId, pos, chat,count
+    global currentId, pos, chat,count,zeroStart,oneStart
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
@@ -35,7 +37,11 @@ def threaded_client(conn):
             reply = data.decode('utf-8')
             print(reply)
             id = int(reply[0])
-            if id == 1:
+            if id==1:
+                oneStart = 1
+            elif id==0:
+                zeroStart = 1
+            if zeroStart==1 and oneStart==1:
                 count = 2
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
@@ -67,6 +73,8 @@ def threaded_client(conn):
     pos = ["0:32,400,30,400,r", "1:1248,400,1248,400,l"]
     currentId = "0"
     count = 0
+    zeroStart = 0
+    oneStart = 0
     print("Connection Closed")
     conn.close()
 
