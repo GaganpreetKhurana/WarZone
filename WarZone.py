@@ -46,13 +46,36 @@ pygame.display.set_icon(icon)
 img = pygame.image.load('guiii.png')
 img1 = pygame.image.load('game1.png')
 timer_button = pygame.image.load("Timer_button.png")
-player_1 = pygame.image.load("Player_1.png")
+player_1 = pygame.image.load("idle1.png")
 bullet_right = pygame.image.load("bulletright.png")
 bullet_right = pygame.transform.smoothscale(bullet_right, (24, 24))
+walkright=[pygame.image.load('Run (1).png'),
+           pygame.image.load('Run (2).png'),
+           pygame.image.load('Run (3).png'),
+           pygame.image.load('Run (4).png'),
+           pygame.image.load('Run (5).png'),
+           pygame.image.load('Run (6).png'),
+           pygame.image.load('Run (7).png'),
+           pygame.image.load('Run (8).png')]
+walkleft =[pygame.image.load('runss1.png'),
+           pygame.image.load('runss2.png'),
+           pygame.image.load('runss3.png'),
+           pygame.image.load('runss4.png'),
+           pygame.image.load('runss5.png'),
+           pygame.image.load('runss6.png'),
+           pygame.image.load('runss7.png'),
+           pygame.image.load('runss8.png')]
+walk=0
+left=False
+right=False
+jump=False
+standr=True
+standl=False
+
 
 pygame.display.update()
 
-FPS = 30
+FPS = 32
 clock = pygame.time.Clock()
 
 smallfont = pygame.font.SysFont("comicsansms", 25)
@@ -480,7 +503,7 @@ def chatWithPlay():
 
 def timer(start_tick):
     global time_left
-    time_left = 300 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")
@@ -512,7 +535,35 @@ def player_draw(player_x, player_y, image, mirror=False):
     else:
         text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
-    gameDisplay.blit(image, [player_x - 16, player_y])
+    global walk
+    global left
+    global right
+    global standr
+    global standl
+    
+    if walk+1>=32:
+        walk=0
+    if left:
+        gameDisplay.blit(walkleft[walk//4],[player_x,player_y])
+        walk+=1
+        left=False
+        standl=True
+        standr=False
+        
+    elif right:
+        gameDisplay.blit(walkright[walk//4],[player_x,player_y])
+        walk+=1
+        right=False
+        standr=True
+        standl=False
+    elif standr:
+        gameDisplay.blit(image, [player_x, player_y])
+    elif standl:
+        image = pygame.transform.flip(image, True, False)
+        gameDisplay.blit(image, [player_x, player_y])
+        
+        
+    #gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
 
@@ -685,6 +736,9 @@ def fire(playerY, face, move_fire, direc):
 
 
 def gameLoop():
+    global left
+    global right
+    global jump
     global pause
     # to be able to modify direction
 
@@ -735,15 +789,22 @@ def gameLoop():
                 gameExit = True
         keys = pygame.key.get_pressed()  # movements
         if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air==False:
+            jump=True
             direction["up"] = 1
             air_stay_count = 32
             air=True
         if keys[pygame.K_LEFT]:
+            left=True
+            right=False
+            #jump=False
             x_change = -4
             face = "left"
             direction["left"] = 1
             direction["right"] = 0
         if keys[pygame.K_RIGHT]:
+            right=True
+            left=False
+            #jump=False
             x_change = +4
             face = "right"
             direction["left"] = 0
