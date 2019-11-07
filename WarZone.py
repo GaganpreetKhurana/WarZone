@@ -49,48 +49,45 @@ timer_button = pygame.image.load("Timer_button.png")
 player_1 = pygame.image.load("idle1.png")
 bullet_right = pygame.image.load("bulletright.png")
 bullet_right = pygame.transform.smoothscale(bullet_right, (12, 12))
-walkright=[pygame.image.load('Run (1).png'),
-           pygame.image.load('Run (2).png'),
-           pygame.image.load('Run (3).png'),
-           pygame.image.load('Run (4).png'),
-           pygame.image.load('Run (5).png'),
-           pygame.image.load('Run (6).png'),
-           pygame.image.load('Run (7).png'),
-           pygame.image.load('Run (8).png')]
-walkright1=[pygame.image.load('Run (1).png'),
-           pygame.image.load('Run (2).png'),
-           pygame.image.load('Run (3).png'),
-           pygame.image.load('Run (4).png'),
-           pygame.image.load('Run (5).png'),
-           pygame.image.load('Run (6).png'),
-           pygame.image.load('Run (7).png'),
-           pygame.image.load('Run (8).png')]
+walkright = [pygame.image.load('Run (1).png'),
+             pygame.image.load('Run (2).png'),
+             pygame.image.load('Run (3).png'),
+             pygame.image.load('Run (4).png'),
+             pygame.image.load('Run (5).png'),
+             pygame.image.load('Run (6).png'),
+             pygame.image.load('Run (7).png'),
+             pygame.image.load('Run (8).png')]
+walkright1 = [pygame.image.load('Run (1).png'),
+              pygame.image.load('Run (2).png'),
+              pygame.image.load('Run (3).png'),
+              pygame.image.load('Run (4).png'),
+              pygame.image.load('Run (5).png'),
+              pygame.image.load('Run (6).png'),
+              pygame.image.load('Run (7).png'),
+              pygame.image.load('Run (8).png')]
 
-walkleft =[pygame.image.load('runss1.png'),
-           pygame.image.load('runss2.png'),
-           pygame.image.load('runss3.png'),
-           pygame.image.load('runss4.png'),
-           pygame.image.load('runss5.png'),
-           pygame.image.load('runss6.png'),
-           pygame.image.load('runss7.png'),
-           pygame.image.load('runss8.png')]
-walkleft1 =[pygame.image.load('runss1.png'),
-           pygame.image.load('runss2.png'),
-           pygame.image.load('runss3.png'),
-           pygame.image.load('runss4.png'),
-           pygame.image.load('runss5.png'),
-           pygame.image.load('runss6.png'),
-           pygame.image.load('runss7.png'),
-           pygame.image.load('runss8.png')]
-walk=0
-left=False
-right=False
-jump=False
-standr=True
-standl=False
-
-
-
+walkleft = [pygame.image.load('runss1.png'),
+            pygame.image.load('runss2.png'),
+            pygame.image.load('runss3.png'),
+            pygame.image.load('runss4.png'),
+            pygame.image.load('runss5.png'),
+            pygame.image.load('runss6.png'),
+            pygame.image.load('runss7.png'),
+            pygame.image.load('runss8.png')]
+walkleft1 = [pygame.image.load('runss1.png'),
+             pygame.image.load('runss2.png'),
+             pygame.image.load('runss3.png'),
+             pygame.image.load('runss4.png'),
+             pygame.image.load('runss5.png'),
+             pygame.image.load('runss6.png'),
+             pygame.image.load('runss7.png'),
+             pygame.image.load('runss8.png')]
+walk = 0
+left = False
+right = False
+jump = False
+standr = True
+standl = False
 
 pygame.display.update()
 
@@ -137,13 +134,12 @@ if net.id == '1':
     enemy_direction = 'r'
     bullet_direction_enemy = 'r'
     bullet_direction_player = 'l'
-    walk1=0
-    left1=False
-    right1=False
-    jump1=False
-    standr1=False
-    standl1=True
-    
+    walk1 = 0
+    left1 = False
+    right1 = False
+    jump1 = False
+    standr1 = False
+    standl1 = True
 
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
@@ -471,7 +467,7 @@ def game_over():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        clock.tick(5)
+        clock.tick(10)
 
 
 def game_intro():
@@ -514,7 +510,7 @@ def game_intro():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        clock.tick(5)
+        clock.tick(10)
 
 
 def chatWithPlay():
@@ -529,7 +525,6 @@ def chatWithPlay():
 
 def timer(start_tick):
     global time_left
-
     time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
@@ -563,6 +558,7 @@ def player_draw(player_x, player_y, image, mirror=False):
     global right
     global standr
     global standl
+    player_x -= 16
     if net.id == '1':
         mirror = not mirror
     if mirror:
@@ -572,60 +568,57 @@ def player_draw(player_x, player_y, image, mirror=False):
     else:
         text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
-    if net.id !='1':
-        
-    
-        if walk+1>=32:
-            walk=0
+    if net.id != '1':
+
+        if walk + 1 >= 32:
+            walk = 0
         if left:
-            gameDisplay.blit(walkleft[walk//4],[player_x,player_y])
-            walk+=1
-            left=False
-            standl=True
-            standr=False
-        
+            gameDisplay.blit(walkleft[walk // 4], [player_x, player_y])
+            walk += 1
+            left = False
+            standl = True
+            standr = False
+
         elif right:
-            gameDisplay.blit(walkright[walk//4],[player_x,player_y])
-            walk+=1
-            right=False
-            standr=True
-            standl=False
+            gameDisplay.blit(walkright[walk // 4], [player_x, player_y])
+            walk += 1
+            right = False
+            standr = True
+            standl = False
         elif standr:
             gameDisplay.blit(image, [player_x, player_y])
         elif standl:
-            #image = pygame.transform.flip(image, True, False)
+            # image = pygame.transform.flip(image, True, False)
             gameDisplay.blit(image, [player_x, player_y])
     elif net.id == '1':
 
-    
-        if walk1+1>=32:
-            walk1=0
+        if walk1 + 1 >= 32:
+            walk1 = 0
         if left1:
-            gameDisplay.blit(walkleft1[walk1//4],[player_x,player_y])
-            walk1+=1
-            left1=False
-            standl1=True
-            standr1=False
-        
+            gameDisplay.blit(walkleft1[walk1 // 4], [player_x, player_y])
+            walk1 += 1
+            left1 = False
+            standl1 = True
+            standr1 = False
+
         elif right1:
-            gameDisplay.blit(walkright1[walk1//4],[player_x,player_y])
-            walk1+=1
-            right1=False
-            standr1=True
-            standl1=False
+            gameDisplay.blit(walkright1[walk1 // 4], [player_x, player_y])
+            walk1 += 1
+            right1 = False
+            standr1 = True
+            standl1 = False
         elif standr1:
             gameDisplay.blit(image, [player_x, player_y])
         elif standl1:
-            #image = pygame.transform.flip(image, True, False)
+            # image = pygame.transform.flip(image, True, False)
             gameDisplay.blit(image, [player_x, player_y])
-        
-        
-    #gameDisplay.blit(image, [player_x - 16, player_y])
+
+    # gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
 
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
-                   player_width=32, player_height=64):
+                   player_width=28, player_height=60):
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
             global air
@@ -660,7 +653,7 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
     return change_x, change_y, air_stay, direction
 
 
-def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=32, player_height=64):
+def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=28, player_height=60):
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 128, 352, 32, 32, player_width,
                                                                    player_height)  # plank 2
@@ -784,18 +777,18 @@ def fire(playerY, face, move_fire, direc):
         move_fire += 16
         if move_fire > 1280:
             fire_bullet = False
-        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24,24)
+        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24, 24)
     if air:
         fire_bullet = False
     # pygame.draw.circle(gameDisplay,light_green,(move_fire,playerY+24),12)
-    gameDisplay.blit(bullet_right, [move_fire +4, playerY + 36])
+    gameDisplay.blit(bullet_right, [move_fire + 4, playerY + 36])
     return fire_bullet, move_fire
 
 
 def gameLoop():
-    global left,left1
-    global right,right1
-    global jump,jump1
+    global left, left1
+    global right, right1
+    global jump, jump1
     global pause
     # to be able to modify direction
 
@@ -846,34 +839,34 @@ def gameLoop():
             if event.type == pygame.QUIT:
                 gameExit = True
         keys = pygame.key.get_pressed()  # movements
-        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air==False:
-            jump=True
+        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air == False:
+            jump = True
             direction["up"] = 1
             air_stay_count = 32
             air = True
         if keys[pygame.K_LEFT]:
-            if net.id !='1':
-                left=True
-                right=False
-                jump=False
-            elif net.id =='1':
-                left1=True
-                right1=False
-                jump1=False
+            if net.id != '1':
+                left = True
+                right = False
+                jump = False
+            elif net.id == '1':
+                left1 = True
+                right1 = False
+                jump1 = False
             x_change = -4
             face = "left"
             direction["left"] = 1
             direction["right"] = 0
         if keys[pygame.K_RIGHT]:
-            if net.id !='1':
-                right=True
-                left=False
-                jump=False
+            if net.id != '1':
+                right = True
+                left = False
+                jump = False
             elif net.id == '1':
-                right1=True
-                left1=False
-                jump1=False
-                
+                right1 = True
+                left1 = False
+                jump1 = False
+
             x_change = +4
             face = "right"
             direction["left"] = 0
@@ -948,7 +941,6 @@ def gameLoop():
 
         chat_screen_update()
         if fire_bullet:
-            # print(bullet_direction_player)
             if temp_air:
                 fire_bullet = False
                 player_bullet_x = 1285
