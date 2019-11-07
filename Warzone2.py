@@ -57,7 +57,24 @@ walkright=[pygame.image.load('Run (1).png'),
            pygame.image.load('Run (6).png'),
            pygame.image.load('Run (7).png'),
            pygame.image.load('Run (8).png')]
+walkright1=[pygame.image.load('Run (1).png'),
+           pygame.image.load('Run (2).png'),
+           pygame.image.load('Run (3).png'),
+           pygame.image.load('Run (4).png'),
+           pygame.image.load('Run (5).png'),
+           pygame.image.load('Run (6).png'),
+           pygame.image.load('Run (7).png'),
+           pygame.image.load('Run (8).png')]
+
 walkleft =[pygame.image.load('runss1.png'),
+           pygame.image.load('runss2.png'),
+           pygame.image.load('runss3.png'),
+           pygame.image.load('runss4.png'),
+           pygame.image.load('runss5.png'),
+           pygame.image.load('runss6.png'),
+           pygame.image.load('runss7.png'),
+           pygame.image.load('runss8.png')]
+walkleft1 =[pygame.image.load('runss1.png'),
            pygame.image.load('runss2.png'),
            pygame.image.load('runss3.png'),
            pygame.image.load('runss4.png'),
@@ -71,6 +88,8 @@ right=False
 jump=False
 standr=True
 standl=False
+
+
 
 
 pygame.display.update()
@@ -118,6 +137,13 @@ if net.id == '1':
     enemy_direction = 'r'
     bullet_direction_enemy = 'r'
     bullet_direction_player = 'l'
+    walk1=0
+    left1=False
+    right1=False
+    jump1=False
+    standr1=False
+    standl1=True
+    
 
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
@@ -526,6 +552,16 @@ def timer(start_tick):
 def player_draw(player_x, player_y, image, mirror=False):
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
+    global walk1
+    global left1
+    global right1
+    global standr1
+    global standl1
+    global walk
+    global left
+    global right
+    global standr
+    global standl
     if net.id == '1':
         mirror = not mirror
     if mirror:
@@ -535,32 +571,52 @@ def player_draw(player_x, player_y, image, mirror=False):
     else:
         text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
-    global walk
-    global left
-    global right
-    global standr
-    global standl
-    
-    if walk+1>=32:
-        walk=0
-    if left:
-        gameDisplay.blit(walkleft[walk//4],[player_x,player_y])
-        walk+=1
-        left=False
-        standl=True
-        standr=False
+    if net.id !='1':
         
-    elif right:
-        gameDisplay.blit(walkright[walk//4],[player_x,player_y])
-        walk+=1
-        right=False
-        standr=True
-        standl=False
-    elif standr:
-        gameDisplay.blit(image, [player_x, player_y])
-    elif standl:
-        image = pygame.transform.flip(image, True, False)
-        gameDisplay.blit(image, [player_x, player_y])
+    
+        if walk+1>=32:
+            walk=0
+        if left:
+            gameDisplay.blit(walkleft[walk//4],[player_x,player_y])
+            walk+=1
+            left=False
+            standl=True
+            standr=False
+        
+        elif right:
+            gameDisplay.blit(walkright[walk//4],[player_x,player_y])
+            walk+=1
+            right=False
+            standr=True
+            standl=False
+        elif standr:
+            gameDisplay.blit(image, [player_x, player_y])
+        elif standl:
+            #image = pygame.transform.flip(image, True, False)
+            gameDisplay.blit(image, [player_x, player_y])
+    elif net.id == '1':
+
+    
+        if walk1+1>=32:
+            walk1=0
+        if left1:
+            gameDisplay.blit(walkleft1[walk1//4],[player_x,player_y])
+            walk1+=1
+            left1=False
+            standl1=True
+            standr1=False
+        
+        elif right1:
+            gameDisplay.blit(walkright1[walk1//4],[player_x,player_y])
+            walk1+=1
+            right1=False
+            standr1=True
+            standl1=False
+        elif standr1:
+            gameDisplay.blit(image, [player_x, player_y])
+        elif standl1:
+            #image = pygame.transform.flip(image, True, False)
+            gameDisplay.blit(image, [player_x, player_y])
         
         
     #gameDisplay.blit(image, [player_x - 16, player_y])
@@ -736,9 +792,9 @@ def fire(playerY, face, move_fire, direc):
 
 
 def gameLoop():
-    global left
-    global right
-    global jump
+    global left,left1
+    global right,right1
+    global jump,jump1
     global pause
     # to be able to modify direction
 
@@ -794,17 +850,28 @@ def gameLoop():
             air_stay_count = 32
             air=True
         if keys[pygame.K_LEFT]:
-            left=True
-            right=False
-            #jump=False
+            if net.id !='1':
+                left=True
+                right=False
+                jump=False
+            elif net.id =='1':
+                left1=True
+                right1=False
+                jump1=False
             x_change = -4
             face = "left"
             direction["left"] = 1
             direction["right"] = 0
         if keys[pygame.K_RIGHT]:
-            right=True
-            left=False
-            #jump=False
+            if net.id !='1':
+                right=True
+                left=False
+                jump=False
+            elif net.id == '1':
+                right1=True
+                left1=False
+                jump1=False
+                
             x_change = +4
             face = "right"
             direction["left"] = 0
