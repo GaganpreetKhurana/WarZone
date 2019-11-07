@@ -22,8 +22,9 @@ pos = ["0:32,400,30,400,r", "1:1248,400,1248,400,l"]
 chat = ""
 count = 0
 
+
 def threaded_client(conn):
-    global currentId, pos, chat,count
+    global currentId, pos, chat, count
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
@@ -58,7 +59,7 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            #print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
+            # print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
             conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count)))
 
         except:
