@@ -10,63 +10,6 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/WarZone.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="888">
-              <caret line="565" column="25" lean-forward="true" selection-start-line="565" selection-start-column="25" selection-end-line="565" selection-end-column="25" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Warzone2.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="24">
-              <caret line="8" lean-forward="true" selection-end-line="996" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Network.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret lean-forward="true" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Server.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="177">
-              <caret line="83" column="33" lean-forward="true" selection-start-line="83" selection-start-column="33" selection-end-line="83" selection-end-column="33" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>send_da</find>
-      <find>send</find>
-      <find>send_</find>
-      <find>pause</find>
-    </findStrings>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -86,11 +29,6 @@
         <option value="$PROJECT_DIR$/.idea/modules.xml" />
       </list>
     </option>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="33" />
-    <option name="width" value="1346" />
-    <option name="height" value="688" />
   </component>
   <component name="ProjectId" id="1SfAR2OPu6nZNzr8krPDSbLdIVj" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -131,7 +69,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Warzone2">
+  <component name="RunManager" selected="Python.WarZone">
     <configuration name="Network" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="WarZone" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -224,8 +162,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Warzone2" />
         <item itemvalue="Python.WarZone" />
+        <item itemvalue="Python.Warzone2" />
         <item itemvalue="Python.Server" />
       </list>
     </recent_temporary>

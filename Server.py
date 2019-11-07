@@ -24,6 +24,7 @@ count = 0
 zeroStart = 0
 oneStart = 0
 
+
 def threaded_client(conn):
     global currentId, pos, chat,count,zeroStart,oneStart
     conn.send(str.encode(currentId))
@@ -64,7 +65,7 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            #print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
+            # print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
             conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count)))
 
         except:
