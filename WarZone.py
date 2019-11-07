@@ -48,7 +48,7 @@ img1 = pygame.image.load('game1.png')
 timer_button = pygame.image.load("Timer_button.png")
 player_1 = pygame.image.load("idle1.png")
 bullet_right = pygame.image.load("bulletright.png")
-bullet_right = pygame.transform.smoothscale(bullet_right, (24, 24))
+bullet_right = pygame.transform.smoothscale(bullet_right, (12, 12))
 walkright=[pygame.image.load('Run (1).png'),
            pygame.image.load('Run (2).png'),
            pygame.image.load('Run (3).png'),
@@ -727,11 +727,11 @@ def fire(playerY, face, move_fire, direc):
         move_fire += 16
         if move_fire > 1280:
             fire_bullet = False
-        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24, 24)
+        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24,24)
     if air:
         fire_bullet = False
     # pygame.draw.circle(gameDisplay,light_green,(move_fire,playerY+24),12)
-    gameDisplay.blit(bullet_right, [move_fire - 12, playerY + 12])
+    gameDisplay.blit(bullet_right, [move_fire +4, playerY + 36])
     return fire_bullet, move_fire
 
 
