@@ -2,7 +2,7 @@ import pygame
 import time
 
 from Network import network
-
+count=0
 pygame.init()
 
 net = network()
@@ -407,10 +407,10 @@ def game_over():
             textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
             textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
-            textrect.center = (957, 277)
+            textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
             textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
-            textrect.center = (957, 327)
+            textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
 
         elif int(hit1) < int(hit2):
@@ -421,10 +421,10 @@ def game_over():
             textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
             textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
-            textrect1.center = (957, 227)
+            textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   -" + str(kill2), black, "small")
-            textrect2.center = (957, 377)
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
         else:
 
@@ -525,7 +525,7 @@ def chatWithPlay():
 
 def timer(start_tick):
     global time_left
-    time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 150 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")
@@ -765,27 +765,29 @@ def health_bars(player_health, enemy_health):
 
 
 def fire(playerY, face, move_fire, direc):
+    global player_bullet_y
     fire_bullet = True
     if face == "left":
         direc["left"] = 1
         move_fire -= 16
         if move_fire < 0:
             fire_bullet = False
-        X, Y, air, direc = obstacles(move_fire, playerY + 32, -16, 0, 0, direc, 24, 24)
+        X, Y, air, direc = obstacles(move_fire, player_bullet_y, -16, 0, 0, direc, 24, 24)
     else:
         direc["right"] = 1
         move_fire += 16
         if move_fire > 1280:
             fire_bullet = False
-        X, Y, air, direc = obstacles(move_fire, playerY + 32, 16, 0, 0, direc, 24, 24)
+        X, Y, air, direc = obstacles(move_fire, player_bullet_y, 16, 0, 0, direc, 24, 24)
     if air:
         fire_bullet = False
-    # pygame.draw.circle(gameDisplay,light_green,(move_fire,playerY+24),12)
-    gameDisplay.blit(bullet_right, [move_fire + 4, playerY + 36])
+    # pygame.draw.circle(gameDisplay,light_green,(move_fire,player_bullet_y),12)
+    gameDisplay.blit(bullet_right, [move_fire, player_bullet_y])
     return fire_bullet, move_fire
 
 
 def gameLoop():
+    global count
     global left, left1
     global right, right1
     global jump, jump1
@@ -797,7 +799,7 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    global player_health, enemy_health, kill1, hit1
+    global player_health, enemy_health, kill1, hit1,kill2,hit2
     player_health = 100
     enemy_health = 100
 
@@ -822,8 +824,8 @@ def gameLoop():
     y_change = 0
     face = "left"
 
-    move_fire = playerX  # firing
-    fire_y = playerY
+    move_fire = 1285  # firing
+    fire_y = 685
     fire_bullet = False
     direc_fire = {"left": 0, "right": 0, "up": 0, "down": 0}
     direc_fire_const = direc_fire
@@ -834,7 +836,7 @@ def gameLoop():
     temp_air = False
     temp_air_E = False
     while not gameExit:
-
+        count+=1
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
@@ -881,7 +883,7 @@ def gameLoop():
                 bullet_direction_player = 'r'
             else:
                 bullet_direction_player = 'l'
-            player_bullet_x = move_fire - 12
+            player_bullet_x = move_fire
             player_bullet_y = playerY + 12
         if keys[pygame.K_p]:
             pygame.draw.rect(gameDisplay, red, (1180, 55, 90, 40))
@@ -905,10 +907,9 @@ def gameLoop():
             y_change = +8
             direction["down"] = 1
             direction["up"] = 0
-
-        x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                  direction)  # obstacles
-        if playerY >= 512:  # boundary checks
+        chatting()
+        chatWithPlay()
+        if playerY+ y_change>= 520:
             air_stay_count = 0
             y_change = 0
             playerY = 576
@@ -927,9 +928,14 @@ def gameLoop():
             x_change = 0
             playerX = 1280 - 32
 
-        if opponent_Y >= 512:
+
+
+        if opponent_Y >=512 :
             enemy_health = 0
 
+        if player_health!=0:
+            x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change, air_stay_count,
+                                                                  direction)  # obstacles
         playerX += x_change
         playerY += y_change
         x_change = 0
@@ -964,19 +970,21 @@ def gameLoop():
         else:
             player_bullet_x = 1285
             player_bullet_y = 645
-        if temp_air_E:
-            player_health -= 10
-            temp_air_E = False
-        player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, -16, 0, 0,
+        if not temp_air_E:
+            player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, -16, 0, 0,
                                                                            direc_fire_const, playerX, playerY, 32, 64
                                                                            , 24, 24)
-        if not temp_air_E:
-            player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, 16, 0, 0,
+            if not temp_air_E:
+                player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, 16, 0, 0,
                                                                                direc_fire_const, playerX, playerY, 32,
                                                                                64
                                                                                , 24, 24)
+        else:
+            player_health -= 10
+            temp_air_E = False
         if enemy_health == 0:
             kill1 += 1
+            hit2+=1
             enemy_health = 100
             if net.id == '1':
                 opponent_X = 32
@@ -986,6 +994,7 @@ def gameLoop():
                 opponent_Y = 400
         if player_health == 0:
             hit1 += 1
+            kill2+=1
             player_health = 100
             if net.id == '0':
                 playerX = 32
@@ -993,14 +1002,12 @@ def gameLoop():
             else:
                 playerX = 1248
                 playerY = 400
-        chatting()
-        chatWithPlay()
+
         pygame.display.update()
 
         clock.tick(FPS)
 
     pygame.quit()
     quit()
-
 
 game_intro()
