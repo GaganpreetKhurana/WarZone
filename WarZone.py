@@ -2,7 +2,8 @@ import pygame
 import time
 
 from Network import network
-count=0
+
+count = 0
 pygame.init()
 
 net = network()
@@ -799,7 +800,7 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    global player_health, enemy_health, kill1, hit1,kill2,hit2
+    global player_health, enemy_health, kill1, hit1, kill2, hit2
     player_health = 100
     enemy_health = 100
 
@@ -836,7 +837,7 @@ def gameLoop():
     temp_air = False
     temp_air_E = False
     while not gameExit:
-        count+=1
+        count += 1
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
@@ -909,7 +910,7 @@ def gameLoop():
             direction["up"] = 0
         chatting()
         chatWithPlay()
-        if playerY+ y_change>= 520:
+        if playerY + y_change >= 520:
             air_stay_count = 0
             y_change = 0
             playerY = 576
@@ -928,14 +929,13 @@ def gameLoop():
             x_change = 0
             playerX = 1280 - 32
 
-
-
-        if opponent_Y >=512 :
+        if opponent_Y >= 512:
             enemy_health = 0
 
-        if player_health!=0:
-            x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                  direction)  # obstacles
+        if player_health != 0:
+            x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change,
+                                                                      air_stay_count,
+                                                                      direction)  # obstacles
         playerX += x_change
         playerY += y_change
         x_change = 0
@@ -971,20 +971,24 @@ def gameLoop():
             player_bullet_x = 1285
             player_bullet_y = 645
         if not temp_air_E:
-            player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, -16, 0, 0,
-                                                                           direc_fire_const, playerX, playerY, 32, 64
-                                                                           , 24, 24)
-            if not temp_air_E:
-                player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, 16, 0, 0,
+            player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, -16, 0,
+                                                                               0,
                                                                                direc_fire_const, playerX, playerY, 32,
                                                                                64
                                                                                , 24, 24)
+            if not temp_air_E:
+                player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, 16,
+                                                                                   0, 0,
+                                                                                   direc_fire_const, playerX, playerY,
+                                                                                   32,
+                                                                                   64
+                                                                                   , 24, 24)
         else:
             player_health -= 10
             temp_air_E = False
         if enemy_health == 0:
             kill1 += 1
-            hit2+=1
+            hit2 += 1
             enemy_health = 100
             if net.id == '1':
                 opponent_X = 32
@@ -994,7 +998,7 @@ def gameLoop():
                 opponent_Y = 400
         if player_health == 0:
             hit1 += 1
-            kill2+=1
+            kill2 += 1
             player_health = 100
             if net.id == '0':
                 playerX = 32
@@ -1009,5 +1013,6 @@ def gameLoop():
 
     pygame.quit()
     quit()
+
 
 game_intro()
