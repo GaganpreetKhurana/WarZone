@@ -403,9 +403,17 @@ def game_over():
     global kill1
     global hit2
     global kill2
-    game_over = True
-    while game_over:
+    global timer_count
 
+    game_over = True
+    start_time = pygame.time.get_ticks()
+    flag=1
+    while game_over:
+        time_left = 4 - (pygame.time.get_ticks() - start_time) / 1000
+        if time_left>0 and flag==1:
+            send_data("")
+            if timer_count==0:
+                flag=0
         gameDisplay.fill(white)
         gameDisplay.blit(img1, [0, 0])
         if int(hit1) > int(hit2):
