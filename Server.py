@@ -2,6 +2,7 @@ import socket
 from _thread import *
 import sys
 import pygame
+
 pygame.init()
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -25,11 +26,12 @@ chat = ""
 count = 0
 zeroStart = 0
 oneStart = 0
-start_time=0
-flag=0
+start_time = 0
+flag = 0
+
 
 def threaded_client(conn):
-    global currentId, pos, chat, count, zeroStart, oneStart,start_time,flag
+    global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
@@ -42,24 +44,24 @@ def threaded_client(conn):
             print(reply)
             id = int(reply[0])
             if id == 1:
-                #print("MCMMCNCNC")
+                # print("MCMMCNCNC")
                 oneStart = 1
             elif id == 0:
                 zeroStart = 1
-            if zeroStart == 1 and oneStart == 1 and flag==0:
+            if zeroStart == 1 and oneStart == 1 and flag == 0:
                 count = 2
                 start_time = pygame.time.get_ticks()
-                #print("St:" +str(start_time)/1000)
-                flag=1
-            if str(flag)=='1':
-                time_left = 152 - (pygame.time.get_ticks() - start_time) / 1000
+                # print("St:" +str(start_time)/1000)
+                flag = 1
+            if str(flag) == '1':
+                time_left = 12 - (pygame.time.get_ticks() - start_time) / 1000
                 print(time_left)
                 if int(time_left) <= 0:
                     count = 0
                     oneStart = 0
                     zeroStart = 0
                     flag = 0
-                    print("HELLO",count,oneStart,zeroStart,flag)
+                    print("HELLO", count, oneStart, zeroStart, flag)
 
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
@@ -75,7 +77,7 @@ def threaded_client(conn):
 
                 if len(reply) > 2: print("Sending: " + chat)
 
-            #print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
+            # print(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count))
             conn.sendall(str.encode(chat + '?' + str(pos[0]) + '?' + str(pos[1]) + '?' + str(count)))
 
         except:
@@ -95,4 +97,3 @@ while True:
     conn, addr = s.accept()
     print("Connected to: ", addr)
     start_new_thread(threaded_client, (conn,))
-

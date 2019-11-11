@@ -8,48 +8,61 @@ pygame.init()
 
 net = network()
 
+# Tuple declaration for different colors
 white = (255, 255, 255)
 black = (0, 0, 0)
 red = (200, 0, 0)
 light_red = (255, 0, 0)
 light_grey = (220, 220, 220)
-
 green = (0, 155, 0)
 light_green = (0, 255, 0)
-
 # different colours for health bar
 gren = (0, 200, 0)
 yelow = (100, 100, 0)
 rde = (200, 0, 0)
-
 yellow = (200, 200, 0)
 light_yellow = (255, 255, 0)
 blue = (32, 139, 185)
 light_blue = (0, 0, 255)
+
+# variable for pause
 pause = False
 
 # for player 1
-hit1 = 0
-kill1 = 0
+player_death = 0
+player_kills = 0
 # for player 2
-hit2 = 0
-kill2 = 0
+enemy_death = 0
+enemy_kills = 0
+
 font = pygame.font.SysFont('comicsans', 40, True)
+
 time_left = int(300)
 
+# Window Size
 display_width = 1280
 display_height = 640
 gameDisplay = pygame.display.set_mode((display_width, display_height))
+
+# BAckground
 background_clouds = pygame.image.load("Background.png")
+
+# Title bar
 pygame.display.set_caption("WAR ZONE")
 icon = pygame.image.load("log.png")
 pygame.display.set_icon(icon)
+
 img = pygame.image.load('guiii.png')
 img1 = pygame.image.load('game1.png')
+
 timer_button = pygame.image.load("Timer_button.png")
+
 player_1 = pygame.image.load("idle1.png")
+
 bullet_right = pygame.image.load("bulletright.png")
 bullet_right = pygame.transform.smoothscale(bullet_right, (12, 12))
+bullet_left = pygame.transform.flip(bullet_right, True, False)
+
 walkright = [pygame.image.load('Run (1).png'),
              pygame.image.load('Run (2).png'),
              pygame.image.load('Run (3).png'),
@@ -57,7 +70,7 @@ walkright = [pygame.image.load('Run (1).png'),
              pygame.image.load('Run (5).png'),
              pygame.image.load('Run (6).png'),
              pygame.image.load('Run (7).png'),
-             pygame.image.load('Run (8).png')]
+             pygame.image.load('Run (8).png')]  # Right Walking Animations for id==0
 walkright1 = [pygame.image.load('Run (1).png'),
               pygame.image.load('Run (2).png'),
               pygame.image.load('Run (3).png'),
@@ -65,7 +78,7 @@ walkright1 = [pygame.image.load('Run (1).png'),
               pygame.image.load('Run (5).png'),
               pygame.image.load('Run (6).png'),
               pygame.image.load('Run (7).png'),
-              pygame.image.load('Run (8).png')]
+              pygame.image.load('Run (8).png')]  # Right Walking Animations for id==1
 
 walkleft = [pygame.image.load('runss1.png'),
             pygame.image.load('runss2.png'),
@@ -74,7 +87,7 @@ walkleft = [pygame.image.load('runss1.png'),
             pygame.image.load('runss5.png'),
             pygame.image.load('runss6.png'),
             pygame.image.load('runss7.png'),
-            pygame.image.load('runss8.png')]
+            pygame.image.load('runss8.png')]  # Left Walking Animations for id==0
 walkleft1 = [pygame.image.load('runss1.png'),
              pygame.image.load('runss2.png'),
              pygame.image.load('runss3.png'),
@@ -82,7 +95,9 @@ walkleft1 = [pygame.image.load('runss1.png'),
              pygame.image.load('runss5.png'),
              pygame.image.load('runss6.png'),
              pygame.image.load('runss7.png'),
-             pygame.image.load('runss8.png')]
+             pygame.image.load('runss8.png')]  # Left Walking Animations for id==1
+
+# variables fo animation id==0
 walk = 0
 left = False
 right = False
@@ -95,6 +110,7 @@ pygame.display.update()
 FPS = 32
 clock = pygame.time.Clock()
 
+# different font sizes
 smallfont = pygame.font.SysFont("comicsansms", 25)
 medfont = pygame.font.SysFont("comicsansms", 50)
 largefont = pygame.font.SysFont("comicsansms", 80)
@@ -108,6 +124,7 @@ prev = ""
 start_tick = 0
 timer_count = 0
 
+# initial values for variables
 player_health = 100
 enemy_health = 100
 playerX = 32
@@ -123,22 +140,21 @@ player_bullet_x = 1285  # player_bullet_x is X coordinate of players bullet
 player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
 enemy_bullet_x = 1285
 enemy_bullet_y = 645
-bullet_direction_player = 'r'  # bullet_direction_player values 'r','l'
-bullet_direction_enemy = 'l'
-player_direction = 'r'
-enemy_direction = 'l'
-air = False
+enemy_bullet_old = 1285
+enemy_bullet_change = 0
 
+player_status = 'n'
+enemy_status = 'n'
+air = False  # player in air or not
+
+# initial for id==1
 if net.id == '1':
     playerX = 1248
     playerY = 400
     opponent_X = 32
     opponent_Y = 400
-    player_direction = 'l'
-    enemy_direction = 'r'
-    bullet_direction_enemy = 'r'
-    bullet_direction_player = 'l'
 
+# varibles for animation id==1
 walk1 = 0
 left1 = False
 right1 = False
@@ -147,14 +163,14 @@ standr1 = False
 standl1 = True
 
 
-def message_to_screen(msg, color, y_displace=0, size="small"):
+def message_to_screen(msg, color, y_displace=0, size="small"):  # function for displaying some msg on screen
     textsurf, textRect = text_objects(msg, color, size)
     textRect.center = (640, 200 + y_displace)
     gameDisplay.blit(textsurf, textRect)
 
 
 # to clear the text printed on the screen after 5 seconds
-def chat_screen_update():
+def chat_screen_update():  # function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
@@ -162,36 +178,37 @@ def chat_screen_update():
     gameDisplay.blit(timer_button, [580, 10])
     text = smallfont.render(printchat, True, black)
     gameDisplay.blit(text, [20, 60])
-
-    text_to_button(time_str, black, 623, 24, 30, 30, 'medium')
+    text_to_button(time_str, black, 623, 24, 30, 30)
     health_bars(player_health, enemy_health)
     player_draw(playerX, playerY, player_1)
     player_draw(opponent_X, opponent_Y, player_1, True)
-    gameDisplay.blit(bullet_right, (enemy_bullet_x, enemy_bullet_y))
+    if enemy_bullet_change > 0:
+        gameDisplay.blit(bullet_right, (enemy_bullet_x, enemy_bullet_y))
+    else:
+        gameDisplay.blit(bullet_left, (enemy_bullet_x, enemy_bullet_y))
 
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
 
 
-def text_objects(msg, color, size="small"):
-    # the below statement added just to prevent error local variable used before refernce
+def text_objects(msg, color, size="small"):  # for creating text objects
+    # the below statement added just to prevent error local variable used before reference
     textSurface = smallfont.render(msg, True, color)
-
     if size == "small":
         textSurface = smallfont.render(msg, True, color)
-    elif size == "meduim":
+    elif size == "medium":
         textSurface = medfont.render(msg, True, color)
     elif size == "large":
         textSurface = largefont.render(msg, True, color)
     return textSurface, textSurface.get_rect()
 
 
-def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size="small"):
+def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size="small"):  # adding text to buttons
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth // 2)), (buttony + (buttonheight // 2)))
     gameDisplay.blit(textSurf, textRect)
 
 
-def helps():
+def helps():  # Controls/Help Screen
     helps = True
     while helps:
         gameDisplay.fill(green)
@@ -233,7 +250,7 @@ def helps():
         clock.tick(15)
 
 
-def button(text, x, y, width, height, inactive_color, active_color, action=None):
+def button(text, x, y, width, height, inactive_color, active_color, action=None):  # for adding functionality to button
     global pause
     cur = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
@@ -261,7 +278,7 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
     text_to_button(text, black, x, y, width, height)
 
 
-def chat_box():
+def chat_box():  # to create chat box
     chat_screen_update()
     pygame.display.update()
 
@@ -298,7 +315,7 @@ def chat_box():
     chatStr = output
 
 
-def chatting():
+def chatting():  # to chat
     global chatStr, printchat, printchatcheck, FPScount
     reply = send_data(chatStr)
     if reply != printchatcheck:
@@ -321,58 +338,59 @@ def chatting():
         # chat_screen_update()
 
 
-def send_data(output):
+def send_data(output):  # to send/receive data/// output is chat string
     """
     Send position to server
     return: None
     """
-    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y, timer_count, player_direction, enemy_direction
+    global playerX, playerY, opponent_X, opponent_Y, player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y, timer_count, player_status, enemy_status
     # print(enemy_bullet_x,enemy_bullet_y)
     data = str(net.id) + ":" + output + '?' + str(playerX) + ',' + str(playerY) + ',' + str(
-        player_bullet_x) + ',' + str(player_bullet_y) + ',' + str(player_direction)
+        player_bullet_x) + ',' + str(player_bullet_y) + ',' + str(player_status)
     reply = net.send(data)
     arr = reply.split('?')
     timer_count = int(arr[3])
-
+    print(reply)
     if net.id == "0":
         opponent_X = int(arr[2][2:].split(',')[0])
         opponent_Y = int(arr[2][2:].split(',')[1])
         enemy_bullet_x = int(arr[2][2:].split(',')[2])
         enemy_bullet_y = int(arr[2][2:].split(',')[3])
-        enemy_direction = (arr[2][2:].split(',')[4])
+        enemy_status = (arr[2][2:].split(',')[4])
         playerX = int(arr[1][2:].split(',')[0])
         playerY = int(arr[1][2:].split(',')[1])
         player_bullet_x = int(arr[1][2:].split(',')[2])
         player_bullet_y = int(arr[1][2:].split(',')[3])
-        player_direction = (arr[1][2:].split(',')[4])
+        player_status = (arr[1][2:].split(',')[4])
     else:
         opponent_X = int(arr[1][2:].split(',')[0])
         opponent_Y = int(arr[1][2:].split(',')[1])
         enemy_bullet_x = int(arr[1][2:].split(',')[2])
         enemy_bullet_y = int(arr[1][2:].split(',')[3])
-        enemy_direction = (arr[1][2:].split(',')[4])
+        enemy_status = (arr[1][2:].split(',')[4])
         playerX = int(arr[2][2:].split(',')[0])
         playerY = int(arr[2][2:].split(',')[1])
         player_bullet_x = int(arr[2][2:].split(',')[2])
         player_bullet_y = int(arr[2][2:].split(',')[3])
-        player_direction = (arr[2][2:].split(',')[4])
+        player_status = (arr[2][2:].split(',')[4])
 
-    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change
+    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old
     opponent_X_change = opponent_X - opponent_X_old
     opponent_Y_change = opponent_Y - opponent_Y_old
     opponent_X_old = opponent_X
     opponent_Y_old = opponent_Y
+    enemy_bullet_change = enemy_bullet_x - enemy_bullet_old
+    enemy_bullet_old = enemy_bullet_x
     reply = arr[0]
     return reply[2:]
 
 
-def unpause():
+def unpause():  # to undo pause
     global pause
     pause = False
 
 
-def paused():
-    largetext = pygame.font.SysFont("comicsansms", 115)
+def paused():  # pause screen
     textsurf, textrect = text_objects("PAUSED", red, "large")
     textrect.center = (630, 200)
     gameDisplay.blit(textsurf, textrect)
@@ -398,63 +416,59 @@ def paused():
         chat_screen_update()
 
 
-def game_over():
-    global hit1
-    global kill1
-    global hit2
-    global kill2
+def game_over():  # game over screen
+    global player_death
+    global player_kills
+    global enemy_death
+    global enemy_kills
     global timer_count
 
     game_over = True
     start_time = pygame.time.get_ticks()
-    flag=1
+    flag = 1
     while game_over:
         time_left = 4 - (pygame.time.get_ticks() - start_time) / 1000
-        if time_left>0 and flag==1:
+        if time_left > 0 and flag == 1:
             send_data("")
-            if timer_count==0:
-                flag=0
+            if timer_count == 0:
+                flag = 0
         gameDisplay.fill(white)
         gameDisplay.blit(img1, [0, 0])
-        if int(hit1) > int(hit2):
-
-            largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext = pygame.font.SysFont("comicsansms", 50)
-
+        if int(player_death) < int(enemy_death):
             textsurf, textrect = text_objects("YOU WON", red, "large")
             textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(player_kills) + "   - " + str(player_death),
+                                                black, "small")
             textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(enemy_kills) + "   - " + str(enemy_death),
+                                                black, "small")
             textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
 
-        elif int(hit1) < int(hit2):
-
-            largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext = pygame.font.SysFont("comicsansms", 50)
+        elif int(player_death) > int(enemy_death):
             textsurf, textrect = text_objects("YOU LOSE", red, "large")
             textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(player_kills) + "   - " + str(player_death),
+                                                black, "small")
             textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(enemy_kills) + "   - " + str(enemy_death),
+                                                black, "small")
             textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
         else:
-
-            largetext = pygame.font.SysFont("comicsansms", 90)
-            smalltext = pygame.font.SysFont("comicsansms", 50)
             textsurf, textrect = text_objects("TIE", red, "large")
             textrect.center = (957, 177)
             gameDisplay.blit(textsurf, textrect)
-            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(hit1) + "   - " + str(kill1), black, "small")
+            textsurf1, textrect1 = text_objects("PLAYER 1 :" + " + " + str(player_kills) + "   - " + str(player_death),
+                                                black, "small")
             textrect1.center = (957, 277)
             gameDisplay.blit(textsurf1, textrect1)
-            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(hit2) + "   - " + str(kill2), black, "small")
+            textsurf2, textrect2 = text_objects("PLAYER 2 :" + " + " + str(enemy_kills) + "   - " + str(enemy_death),
+                                                black, "small")
             textrect2.center = (957, 327)
             gameDisplay.blit(textsurf2, textrect2)
 
@@ -464,6 +478,11 @@ def game_over():
             # to lighten the button when mouse is over it
             pygame.draw.rect(gameDisplay, light_red, (770, 560, 170, 50))
             if click[0] == 1:  # that is on left click
+                enemy_kills = 0
+                enemy_death = 0
+                player_death = 0
+                player_kills = 0
+
                 gameLoop()
         else:
             pygame.draw.rect(gameDisplay, red, (770, 560, 170, 50))
@@ -488,7 +507,7 @@ def game_over():
         clock.tick(10)
 
 
-def game_intro():
+def game_intro():  # game intro screen
     intro = True
     while intro:
 
@@ -531,7 +550,7 @@ def game_intro():
         clock.tick(10)
 
 
-def chatWithPlay():
+def chatWithPlay():  # to chat while playing
     global chatStr, printchat, printchatcheck, FPScount
 
     if FPScount == 150:
@@ -541,9 +560,9 @@ def chatWithPlay():
         chat_screen_update()
 
 
-def timer(start_tick):
+def timer(start_tick):  # timer control
     global time_left
-    time_left = 150 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 10 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")
@@ -563,28 +582,19 @@ def timer(start_tick):
     prev = time_str
 
 
-def player_draw(player_x, player_y, image, mirror=False):
+def player_draw(player_x, player_y, image, mirror=False):  # to draw players and display scrores
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
-    global walk1
-    global left1
-    global right1
-    global standr1
-    global standl1
-    global walk
-    global left
-    global right
-    global standr
-    global standl
+    global walk1, left1, right1, standr1, standl1, walk, left, right, standr, standl
     player_x -= 16
     if net.id == '1':
         mirror = not mirror
     if mirror:
         image = pygame.transform.flip(image, True, False)
     if net.id == '1':
-        text = font.render('Score  ' + str(hit1) + " : " + str(kill1), 1, (0, 0, 0))
+        text = font.render('Score  ' + str(player_death) + " : " + str(player_kills), 1, (0, 0, 0))
     else:
-        text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
+        text = font.render('Score  ' + str(player_kills) + " : " + str(player_death), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
     if net.id != '1':
         if not mirror:
@@ -673,7 +683,7 @@ def player_draw(player_x, player_y, image, mirror=False):
 
 
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
-                   player_width=28, player_height=60):
+                   player_width=28, player_height=60):  # to check an obstacle
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
             global air
@@ -708,7 +718,8 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
     return change_x, change_y, air_stay, direction
 
 
-def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=28, player_height=60):
+def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=28,
+              player_height=60):  # to check all obstacles
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 128, 352, 32, 32, player_width,
                                                                    player_height)  # plank 2
@@ -797,7 +808,7 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
     return x_change, y_change, air_stay_count, direction
 
 
-def health_bars(player_health, enemy_health):
+def health_bars(player_health, enemy_health):  # to display health bars
     if player_health > 75:
         player_health_color = gren
     elif player_health > 50:
@@ -819,7 +830,7 @@ def health_bars(player_health, enemy_health):
         pygame.draw.rect(gameDisplay, enemy_health_color, (430, 25, enemy_health, 30))
 
 
-def fire(playerY, face, move_fire, direc):
+def fire(playerY, face, move_fire, direc):  # for firing
     global player_bullet_y
     fire_bullet = True
     if face == "left":
@@ -828,20 +839,26 @@ def fire(playerY, face, move_fire, direc):
         if move_fire < 0:
             fire_bullet = False
         X, Y, air, direc = obstacles(move_fire, player_bullet_y, -16, 0, 0, direc, 24, 24)
+        if air:
+            fire_bullet = False
+        else:
+            gameDisplay.blit(bullet_left, [move_fire, player_bullet_y])
     else:
         direc["right"] = 1
         move_fire += 16
         if move_fire > 1280:
             fire_bullet = False
         X, Y, air, direc = obstacles(move_fire, player_bullet_y, 16, 0, 0, direc, 24, 24)
-    if air:
-        fire_bullet = False
+        if air:
+            fire_bullet = False
+        else:
+            gameDisplay.blit(bullet_right, [move_fire, player_bullet_y])
     # pygame.draw.circle(gameDisplay,light_green,(move_fire,player_bullet_y),12)
-    gameDisplay.blit(bullet_right, [move_fire, player_bullet_y])
+
     return fire_bullet, move_fire
 
 
-def gameLoop():
+def gameLoop():  # main game
     global count
     global left, left1
     global right, right1
@@ -854,7 +871,7 @@ def gameLoop():
     gameDisplay.blit(background_clouds, [0, 0])
     gameExit = False
 
-    global player_health, enemy_health, kill1, hit1, kill2, hit2
+    global player_health, enemy_health, player_kills, player_death, enemy_kills, enemy_death
     player_health = 100
     enemy_health = 100
 
@@ -866,7 +883,7 @@ def gameLoop():
     opponent_X = 1248
     opponent_Y = 400
 
-    global player_bullet_x, player_bullet_y, bullet_direction_player, enemy_bullet_x, enemy_bullet_y
+    global player_bullet_x, player_bullet_y, enemy_bullet_x, enemy_bullet_y
 
     if net.id == '1':
         playerX = 1248
@@ -886,13 +903,12 @@ def gameLoop():
     direc_fire_const = direc_fire
     face_const = face
 
-    global start_tick, player_direction, enemy_direction, bullet_direction_player, bullet_direction_enemy, air
+    global start_tick, player_status, enemy_status, air
     start_tick = pygame.time.get_ticks()
     temp_air = False
-    temp_air_E = False
     while not gameExit:
         count += 1
-        print(opponent_X_change)
+        # print(opponent_X_change)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
@@ -924,7 +940,6 @@ def gameLoop():
                 right1 = True
                 left1 = False
                 jump1 = False
-
             x_change = +4
             face = "right"
             direction["left"] = 0
@@ -935,10 +950,6 @@ def gameLoop():
             fire_bullet = True
             direc_fire_const = direc_fire
             face_const = face
-            if face_const == "right":
-                bullet_direction_player = 'r'
-            else:
-                bullet_direction_player = 'l'
             player_bullet_x = move_fire
             player_bullet_y = playerY + 12
         if keys[pygame.K_p]:
@@ -963,8 +974,11 @@ def gameLoop():
             y_change = +8
             direction["down"] = 1
             direction["up"] = 0
+
         chatting()
         chatWithPlay()
+        if player_status != 'n':
+            player_status = 'n'
         if playerY + y_change >= 520:
             air_stay_count = 0
             y_change = 0
@@ -972,6 +986,7 @@ def gameLoop():
             player_health = 0
             air = False
             x_change = 0
+            player_status = 'd'
         elif playerY + y_change <= 0:
             y_change = +8
             direction["up"] = 0
@@ -983,9 +998,6 @@ def gameLoop():
         elif playerX + x_change + 32 >= 1280:
             x_change = 0
             playerX = 1280 - 32
-
-        if opponent_Y >= 512:
-            enemy_health = 0
 
         if player_health != 0:
             x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change,
@@ -1006,6 +1018,7 @@ def gameLoop():
                 fire_bullet = False
                 player_bullet_x = 1285
                 player_bullet_y = 645
+                player_status = 'h'
                 enemy_health -= 10
                 temp_air = False
             else:
@@ -1021,29 +1034,16 @@ def gameLoop():
                                                                                      16, 0, 0,
                                                                                      direc_fire_const, opponent_X,
                                                                                      opponent_Y, 32, 32, 24, 24)
-
         else:
             player_bullet_x = 1285
             player_bullet_y = 645
-        if not temp_air_E:
-            player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, -16, 0,
-                                                                               0,
-                                                                               direc_fire_const, playerX, playerY, 32,
-                                                                               64
-                                                                               , 24, 24)
-            if not temp_air_E:
-                player_1_2_x, player_1_2_y, temp_air_E, temp_dict = obstacle_check(enemy_bullet_x, enemy_bullet_y, 16,
-                                                                                   0, 0,
-                                                                                   direc_fire_const, playerX, playerY,
-                                                                                   32,
-                                                                                   64
-                                                                                   , 24, 24)
-        else:
+        if enemy_status == 'd':
+            enemy_health = 0
+        elif enemy_status == 'h':
             player_health -= 10
-            temp_air_E = False
         if enemy_health == 0:
-            kill1 += 1
-            hit2 += 1
+            player_kills += 1
+            enemy_death += 1
             enemy_health = 100
             if net.id == '1':
                 opponent_X = 32
@@ -1052,8 +1052,8 @@ def gameLoop():
                 opponent_X = 1248
                 opponent_Y = 400
         if player_health == 0:
-            hit1 += 1
-            kill2 += 1
+            player_death += 1
+            enemy_kills += 1
             player_health = 100
             if net.id == '0':
                 playerX = 32
