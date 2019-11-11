@@ -114,10 +114,10 @@ playerX = 32
 playerY = 400
 opponent_X = 1248
 opponent_Y = 400
-opponent_X_old=1248
-opponent_X_change=0
-opponent_Y_old=400
-opponent_Y_change=0
+opponent_X_old = 1248
+opponent_X_change = 0
+opponent_Y_old = 400
+opponent_Y_change = 0
 # size is 24X24
 player_bullet_x = 1285  # player_bullet_x is X coordinate of players bullet
 player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
@@ -357,11 +357,11 @@ def send_data(output):
         player_bullet_y = int(arr[2][2:].split(',')[3])
         player_direction = (arr[2][2:].split(',')[4])
 
-    global opponent_Y_old,opponent_Y_change,opponent_X_old,opponent_X_change
-    opponent_X_change=opponent_X-opponent_X_old
-    opponent_Y_change=opponent_Y-opponent_Y_old
-    opponent_X_old=opponent_X
-    opponent_Y_old=opponent_Y
+    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change
+    opponent_X_change = opponent_X - opponent_X_old
+    opponent_Y_change = opponent_Y - opponent_Y_old
+    opponent_X_old = opponent_X
+    opponent_Y_old = opponent_Y
     reply = arr[0]
     return reply[2:]
 
@@ -602,13 +602,13 @@ def player_draw(player_x, player_y, image, mirror=False):
         else:
             if walk1 + 1 >= 32:
                 walk1 = 0
-            elif opponent_X_change>0:
+            elif opponent_X_change > 0:
                 gameDisplay.blit(walkright1[walk1 // 4], [player_x, player_y])
-                walk1+=1
-                right1=False
-                standl1=False
-                standr1=True
-            elif opponent_X_change<0:
+                walk1 += 1
+                right1 = False
+                standl1 = False
+                standr1 = True
+            elif opponent_X_change < 0:
                 gameDisplay.blit(walkleft1[walk1 // 4], [player_x, player_y])
                 walk1 += 1
                 left1 = False
@@ -643,13 +643,13 @@ def player_draw(player_x, player_y, image, mirror=False):
         else:
             if walk + 1 >= 32:
                 walk = 0
-            if opponent_X_change<0:
+            if opponent_X_change < 0:
                 gameDisplay.blit(walkleft[walk // 4], [player_x, player_y])
                 walk += 1
                 left = False
                 standl = True
                 standr = False
-            elif opponent_X_change>0:
+            elif opponent_X_change > 0:
                 gameDisplay.blit(walkright[walk // 4], [player_x, player_y])
                 walk += 1
                 right = False
