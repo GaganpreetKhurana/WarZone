@@ -114,7 +114,10 @@ playerX = 32
 playerY = 400
 opponent_X = 1248
 opponent_Y = 400
-
+opponent_X_old=1248
+opponent_X_change=0
+opponent_Y_old=400
+opponent_Y_change=0
 # size is 24X24
 player_bullet_x = 1285  # player_bullet_x is X coordinate of players bullet
 player_bullet_y = 645  # player_bullet_y is Y coordinate of player's bullet
@@ -135,12 +138,13 @@ if net.id == '1':
     enemy_direction = 'r'
     bullet_direction_enemy = 'r'
     bullet_direction_player = 'l'
-    walk1 = 0
-    left1 = False
-    right1 = False
-    jump1 = False
-    standr1 = False
-    standl1 = True
+
+walk1 = 0
+left1 = False
+right1 = False
+jump1 = False
+standr1 = False
+standl1 = True
 
 
 def message_to_screen(msg, color, y_displace=0, size="small"):
@@ -353,6 +357,11 @@ def send_data(output):
         player_bullet_y = int(arr[2][2:].split(',')[3])
         player_direction = (arr[2][2:].split(',')[4])
 
+    global opponent_Y_old,opponent_Y_change,opponent_X_old,opponent_X_change
+    opponent_X_change=opponent_X-opponent_X_old
+    opponent_Y_change=opponent_Y-opponent_Y_old
+    opponent_X_old=opponent_X
+    opponent_Y_old=opponent_Y
     reply = arr[0]
     return reply[2:]
 
@@ -570,50 +579,87 @@ def player_draw(player_x, player_y, image, mirror=False):
         text = font.render('Score  ' + str(kill1) + " : " + str(hit1), 1, (0, 0, 0))
     gameDisplay.blit(text, (10, 20))
     if net.id != '1':
-
-        if walk + 1 >= 32:
-            walk = 0
-        if left:
-            gameDisplay.blit(walkleft[walk // 4], [player_x, player_y])
-            walk += 1
-            left = False
-            standl = True
-            standr = False
-
-        elif right:
-            gameDisplay.blit(walkright[walk // 4], [player_x, player_y])
-            walk += 1
-            right = False
-            standr = True
-            standl = False
-        elif standr:
-            gameDisplay.blit(image, [player_x, player_y])
-        elif standl:
-            # image = pygame.transform.flip(image, True, False)
-            gameDisplay.blit(image, [player_x, player_y])
-    elif net.id == '1':
-
-        if walk1 + 1 >= 32:
-            walk1 = 0
-        if left1:
-            gameDisplay.blit(walkleft1[walk1 // 4], [player_x, player_y])
-            walk1 += 1
-            left1 = False
-            standl1 = True
-            standr1 = False
-
-        elif right1:
-            gameDisplay.blit(walkright1[walk1 // 4], [player_x, player_y])
-            walk1 += 1
-            right1 = False
-            standr1 = True
-            standl1 = False
-        elif standr1:
-            gameDisplay.blit(image, [player_x, player_y])
-        elif standl1:
-            # image = pygame.transform.flip(image, True, False)
-            gameDisplay.blit(image, [player_x, player_y])
-
+        if not mirror:
+            if walk + 1 >= 32:
+                walk = 0
+            if left:
+                gameDisplay.blit(walkleft[walk // 4], [player_x, player_y])
+                walk += 1
+                left = False
+                standl = True
+                standr = False
+            elif right:
+                gameDisplay.blit(walkright[walk // 4], [player_x, player_y])
+                walk += 1
+                right = False
+                standr = True
+                standl = False
+            elif standr:
+                gameDisplay.blit(image, [player_x, player_y])
+            elif standl:
+                # image = pygame.transform.flip(image, True, False)
+                gameDisplay.blit(image, [player_x, player_y])
+        else:
+            if walk1 + 1 >= 32:
+                walk1 = 0
+            elif opponent_X_change>0:
+                gameDisplay.blit(walkright1[walk1 // 4], [player_x, player_y])
+                walk1+=1
+                right1=False
+                standl1=False
+                standr1=True
+            elif opponent_X_change<0:
+                gameDisplay.blit(walkleft1[walk1 // 4], [player_x, player_y])
+                walk1 += 1
+                left1 = False
+                standl1 = True
+                standr1 = False
+            elif standr1:
+                gameDisplay.blit(image, [player_x, player_y])
+            elif standl1:
+                # image = pygame.transform.flip(image, True, False)
+                gameDisplay.blit(image, [player_x, player_y])
+    else:
+        if mirror:
+            if walk1 + 1 >= 32:
+                walk1 = 0
+            if left1:
+                gameDisplay.blit(walkleft1[walk1 // 4], [player_x, player_y])
+                walk1 += 1
+                left1 = False
+                standl1 = True
+                standr1 = False
+            elif right1:
+                gameDisplay.blit(walkright1[walk1 // 4], [player_x, player_y])
+                walk1 += 1
+                right1 = False
+                standr1 = True
+                standl1 = False
+            elif standr1:
+                gameDisplay.blit(image, [player_x, player_y])
+            elif standl1:
+                # image = pygame.transform.flip(image, True, False)
+                gameDisplay.blit(image, [player_x, player_y])
+        else:
+            if walk + 1 >= 32:
+                walk = 0
+            if opponent_X_change<0:
+                gameDisplay.blit(walkleft[walk // 4], [player_x, player_y])
+                walk += 1
+                left = False
+                standl = True
+                standr = False
+            elif opponent_X_change>0:
+                gameDisplay.blit(walkright[walk // 4], [player_x, player_y])
+                walk += 1
+                right = False
+                standr = True
+                standl = False
+            elif standr:
+                gameDisplay.blit(image, [player_x, player_y])
+            elif standl:
+                # image = pygame.transform.flip(image, True, False)
+                gameDisplay.blit(image, [player_x, player_y])
     # gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
@@ -838,6 +884,7 @@ def gameLoop():
     temp_air_E = False
     while not gameExit:
         count += 1
+        print(opponent_X_change)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
