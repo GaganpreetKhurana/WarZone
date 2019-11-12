@@ -28,10 +28,10 @@ zeroStart = 0
 oneStart = 0
 start_time = 0
 flag = 0
-
+just_end=0
 
 def threaded_client(conn):
-    global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag
+    global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag,just_end
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
@@ -43,11 +43,18 @@ def threaded_client(conn):
             reply = data.decode('utf-8')
             print(reply)
             id = int(reply[0])
+
             if id == 1:
                 # print("MCMMCNCNC")
-                oneStart = 1
+                if str(just_end)==str(0):
+                    oneStart = 1
+                else:
+                    just_end=0
             elif id == 0:
-                zeroStart = 1
+                if str(just_end)==str(0):
+                    zeroStart = 1
+                else:
+                    just_end = 0
             if zeroStart == 1 and oneStart == 1 and flag == 0:
                 count = 2
                 start_time = pygame.time.get_ticks()
@@ -61,7 +68,9 @@ def threaded_client(conn):
                     oneStart = 0
                     zeroStart = 0
                     flag = 0
+                    just_end = 1
                     print("HELLO", count, oneStart, zeroStart, flag)
+            print("HELLO", count, oneStart, zeroStart, flag,just_end)
 
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
