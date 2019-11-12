@@ -118,6 +118,7 @@ largefont = pygame.font.SysFont("comicsansms", 80)
 chatStr = ""
 printchat = ""
 printchatcheck = ""
+chat_word = ""
 FPScount = 0
 time_str = ""
 prev = ""
@@ -170,13 +171,13 @@ def message_to_screen(msg, color, y_displace=0, size="small"):  # function for d
 
 
 # to clear the text printed on the screen after 5 seconds
-def chat_screen_update():  # function for updating screen
+def chat_screen_update():# function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
     button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
     gameDisplay.blit(timer_button, [580, 10])
-    text = smallfont.render(printchat, True, black)
+    text = smallfont.render(chat_word+printchat, True, black)
     gameDisplay.blit(text, [20, 60])
     text_to_button(time_str, black, 623, 24, 30, 30)
     health_bars(player_health, enemy_health)
@@ -282,10 +283,14 @@ def chat_box():  # to create chat box
     chat_screen_update()
     pygame.display.update()
 
+    global chat_word
+
     current_string = []
     output = ""
     writing = True
+
     while writing:
+        chat_word = "Chat:"
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -303,7 +308,7 @@ def chat_box():  # to create chat box
                     current_string.append(chr(event.key))
 
         output = "".join(current_string)
-        text = smallfont.render(output, True, black)
+        text = smallfont.render(chat_word+output, True, black)
         timer(start_tick)
         chat_screen_update()
         gameDisplay.blit(text, [20, 60])
@@ -316,7 +321,7 @@ def chat_box():  # to create chat box
 
 
 def chatting():  # to chat
-    global chatStr, printchat, printchatcheck, FPScount
+    global chatStr, printchat, printchatcheck, FPScount,chat_word
     reply = send_data(chatStr)
     if reply != printchatcheck:
         printchat = reply
@@ -325,7 +330,8 @@ def chatting():  # to chat
     if FPScount <= 151: FPScount += 1
 
     if len(printchat) > 0 and FPScount == 1:
-        text = smallfont.render(printchat, True, black)
+        chat_word = "Chat:"
+        text = smallfont.render(chat_word+printchat, True, black)
         printchatcheck = printchat
 
         gameDisplay.blit(text, [20, 60])
@@ -374,7 +380,7 @@ def send_data(output):  # to send/receive data/// output is chat string
         player_bullet_y = int(arr[2][2:].split(',')[3])
         player_status = (arr[2][2:].split(',')[4])
 
-    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old
+    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old,chat_word
     opponent_X_change = opponent_X - opponent_X_old
     opponent_Y_change = opponent_Y - opponent_Y_old
     opponent_X_old = opponent_X
@@ -382,6 +388,7 @@ def send_data(output):  # to send/receive data/// output is chat string
     enemy_bullet_change = enemy_bullet_x - enemy_bullet_old
     enemy_bullet_old = enemy_bullet_x
     reply = arr[0]
+
     return reply[2:]
 
 
@@ -423,6 +430,12 @@ def game_over():  # game over screen
     global enemy_kills
     global timer_count
 
+    global chatStr, printchat, printchatcheck, FPScount, chat_word
+    chatStr = ""
+    printchat = ""
+    printchatcheck = ""
+    FPScount = 0
+    chat_word = ""
     game_over = True
     start_time = pygame.time.get_ticks()
     flag = 1
@@ -551,18 +564,19 @@ def game_intro():  # game intro screen
 
 
 def chatWithPlay():  # to chat while playing
-    global chatStr, printchat, printchatcheck, FPScount
+    global chatStr, printchat, printchatcheck, FPScount,chat_word
 
     if FPScount == 150:
         chatStr = ""
         printchat = ""
+        chat_word = ""
         # print("DONE")
         chat_screen_update()
 
 
 def timer(start_tick):  # timer control
     global time_left
-    time_left = 10 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")

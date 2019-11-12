@@ -61,7 +61,7 @@ def threaded_client(conn):
                 # print("St:" +str(start_time)/1000)
                 flag = 1
             if str(flag) == '1':
-                time_left = 12 - (pygame.time.get_ticks() - start_time) / 1000
+                time_left = 62 - (pygame.time.get_ticks() - start_time) / 1000
                 print(time_left)
                 if int(time_left) <= 0:
                     count = 0
