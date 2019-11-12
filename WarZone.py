@@ -3,7 +3,6 @@ import time
 
 from Network import network
 
-count = 0
 pygame.init()
 
 net = network()
@@ -171,13 +170,13 @@ def message_to_screen(msg, color, y_displace=0, size="small"):  # function for d
 
 
 # to clear the text printed on the screen after 5 seconds
-def chat_screen_update():# function for updating screen
+def chat_screen_update():  # function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
     button("Chat", 1180, 11, 90, 40, yellow, light_yellow)
     button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
     gameDisplay.blit(timer_button, [580, 10])
-    text = smallfont.render(chat_word+printchat, True, black)
+    text = smallfont.render(chat_word + printchat, True, black)
     gameDisplay.blit(text, [20, 60])
     text_to_button(time_str, black, 623, 24, 30, 30)
     health_bars(player_health, enemy_health)
@@ -308,7 +307,7 @@ def chat_box():  # to create chat box
                     current_string.append(chr(event.key))
 
         output = "".join(current_string)
-        text = smallfont.render(chat_word+output, True, black)
+        text = smallfont.render(chat_word + output, True, black)
         timer(start_tick)
         chat_screen_update()
         gameDisplay.blit(text, [20, 60])
@@ -321,7 +320,7 @@ def chat_box():  # to create chat box
 
 
 def chatting():  # to chat
-    global chatStr, printchat, printchatcheck, FPScount,chat_word
+    global chatStr, printchat, printchatcheck, FPScount, chat_word
     reply = send_data(chatStr)
     if reply != printchatcheck:
         printchat = reply
@@ -331,7 +330,7 @@ def chatting():  # to chat
 
     if len(printchat) > 0 and FPScount == 1:
         chat_word = "Chat:"
-        text = smallfont.render(chat_word+printchat, True, black)
+        text = smallfont.render(chat_word + printchat, True, black)
         printchatcheck = printchat
 
         gameDisplay.blit(text, [20, 60])
@@ -380,7 +379,7 @@ def send_data(output):  # to send/receive data/// output is chat string
         player_bullet_y = int(arr[2][2:].split(',')[3])
         player_status = (arr[2][2:].split(',')[4])
 
-    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old,chat_word
+    global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old, chat_word
     opponent_X_change = opponent_X - opponent_X_old
     opponent_Y_change = opponent_Y - opponent_Y_old
     opponent_X_old = opponent_X
@@ -564,7 +563,7 @@ def game_intro():  # game intro screen
 
 
 def chatWithPlay():  # to chat while playing
-    global chatStr, printchat, printchatcheck, FPScount,chat_word
+    global chatStr, printchat, printchatcheck, FPScount, chat_word
 
     if FPScount == 150:
         chatStr = ""
@@ -873,7 +872,6 @@ def fire(playerY, face, move_fire, direc):  # for firing
 
 
 def gameLoop():  # main game
-    global count
     global left, left1
     global right, right1
     global jump, jump1
@@ -920,8 +918,9 @@ def gameLoop():  # main game
     global start_tick, player_status, enemy_status, air
     start_tick = pygame.time.get_ticks()
     temp_air = False
+    status_count = 0
+    enemy_status_count = 0
     while not gameExit:
-        count += 1
         # print(opponent_X_change)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -991,8 +990,11 @@ def gameLoop():  # main game
 
         chatting()
         chatWithPlay()
-        if player_status != 'n':
+        if player_status != 'n' and status_count != 1:
             player_status = 'n'
+            status_count = 0
+        elif player_status != 'n' and status_count == 1:
+            status_count += 1
         if playerY + y_change >= 520:
             air_stay_count = 0
             y_change = 0
@@ -1001,6 +1003,7 @@ def gameLoop():  # main game
             air = False
             x_change = 0
             player_status = 'd'
+            status_count += 1
         elif playerY + y_change <= 0:
             y_change = +8
             direction["up"] = 0
@@ -1035,6 +1038,7 @@ def gameLoop():  # main game
                 player_status = 'h'
                 enemy_health -= 10
                 temp_air = False
+                status_count += 1
             else:
                 fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
                 player_bullet_x = move_fire
@@ -1052,9 +1056,15 @@ def gameLoop():  # main game
             player_bullet_x = 1285
             player_bullet_y = 645
         if enemy_status == 'd':
-            enemy_health = 0
+            if enemy_status_count == 0:
+                enemy_health = 0
+                enemy_status_count += 1
         elif enemy_status == 'h':
-            player_health -= 10
+            if enemy_status_count == 0:
+                player_health -= 10
+                enemy_status_count += 1
+        elif enemy_status == 'n':
+            enemy_status_count = 0
         if enemy_health == 0:
             player_kills += 1
             enemy_death += 1

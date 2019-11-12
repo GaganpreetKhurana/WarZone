@@ -28,10 +28,11 @@ zeroStart = 0
 oneStart = 0
 start_time = 0
 flag = 0
-just_end=0
+just_end = 0
+
 
 def threaded_client(conn):
-    global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag,just_end
+    global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag, just_end
     conn.send(str.encode(currentId))
     currentId = "1"
     chat = "0:"
@@ -46,12 +47,12 @@ def threaded_client(conn):
 
             if id == 1:
                 # print("MCMMCNCNC")
-                if str(just_end)==str(0):
+                if str(just_end) == str(0):
                     oneStart = 1
                 else:
-                    just_end=0
+                    just_end = 0
             elif id == 0:
-                if str(just_end)==str(0):
+                if str(just_end) == str(0):
                     zeroStart = 1
                 else:
                     just_end = 0
@@ -70,7 +71,7 @@ def threaded_client(conn):
                     flag = 0
                     just_end = 1
                     print("HELLO", count, oneStart, zeroStart, flag)
-            print("HELLO", count, oneStart, zeroStart, flag,just_end)
+            print("HELLO", count, oneStart, zeroStart, flag, just_end)
 
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
