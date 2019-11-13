@@ -214,12 +214,13 @@ def helps():  # Controls/Help Screen
         gameDisplay.fill(green)
         message_to_screen("HELP", red, -100, "large")
         message_to_screen("SHOOT AND KILL THE ENEMY ", black, 0, "small")
-        message_to_screen("PRESS SPACEBAR TO JUMP", black, 60, "small")
+        message_to_screen("PRESS SPACEBAR TO SHOOT", black, 60, "small")
         message_to_screen("HEALTH BARS CONSTANTLY KEEPS A CHECK ON YOUR HEALTH AS WELL AS YOUR ENEMY'S HEALTH", black,
                           120, "small")
-        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF TOTAL KILLS TO TOTAL DEATHS", black, 180,
+        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF YOUR KILLS TO ENEMY'S KILLS", black, 180,
                           "small")
         message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 240, "small")
+        message_to_screen("PRESS PAUSE BUTTON TO PAUSE THE SCREEN",black,280,"small")
 
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
         click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
@@ -575,7 +576,7 @@ def chatWithPlay():  # to chat while playing
 
 def timer(start_tick):  # timer control
     global time_left
-    if net.id=="0":
+    if net.id=="0" or net.id=="1":
         if time_left>59:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
