@@ -1,5 +1,4 @@
 import pygame
-import time
 
 from Network import network
 
@@ -43,81 +42,81 @@ display_width = 1280
 display_height = 640
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 
-# BAckground
-background_clouds = pygame.image.load("Background.png")
+# Background
+background_clouds = pygame.image.load("images\Misc_img\Background.png")
 
 # Title bar
 pygame.display.set_caption("WAR ZONE")
-icon = pygame.image.load("log.png")
+icon = pygame.image.load("images\Misc_img\log.png")
 pygame.display.set_icon(icon)
 
-img = pygame.image.load('guiii.png')
-img1 = pygame.image.load('game1.png')
+img = pygame.image.load('images\Misc_img\guiii.png')
+img1 = pygame.image.load('images\Misc_img\game1.png')
 
-timer_button = pygame.image.load("Timer_button.png")
+timer_button = pygame.image.load("images\Misc_img\Timer_button.png")
 
-player_1 = pygame.image.load("idle1.png")
+player_1 = pygame.image.load("images\Misc_img\idle1.png")
 
-bullet_right = pygame.image.load("bulletright.png")
+bullet_right = pygame.image.load(r"images\Misc_img\bulletright.png")
 bullet_right = pygame.transform.smoothscale(bullet_right, (12, 12))
 bullet_left = pygame.transform.flip(bullet_right, True, False)
 
-walkright = [pygame.image.load('Run (1).png'),
-             pygame.image.load('Run (2).png'),
-             pygame.image.load('Run (3).png'),
-             pygame.image.load('Run (4).png'),
-             pygame.image.load('Run (5).png'),
-             pygame.image.load('Run (6).png'),
-             pygame.image.load('Run (7).png'),
-             pygame.image.load('Run (8).png')]  # Right Walking Animations for id==0
-walkright1 = [pygame.image.load('Run (1).png'),
-              pygame.image.load('Run (2).png'),
-              pygame.image.load('Run (3).png'),
-              pygame.image.load('Run (4).png'),
-              pygame.image.load('Run (5).png'),
-              pygame.image.load('Run (6).png'),
-              pygame.image.load('Run (7).png'),
-              pygame.image.load('Run (8).png')]  # Right Walking Animations for id==1
+walkright = [pygame.image.load('images\Run_img\Run (1).png'),
+             pygame.image.load('images\Run_img\Run (2).png'),
+             pygame.image.load('images\Run_img\Run (3).png'),
+             pygame.image.load('images\Run_img\Run (4).png'),
+             pygame.image.load('images\Run_img\Run (5).png'),
+             pygame.image.load('images\Run_img\Run (6).png'),
+             pygame.image.load('images\Run_img\Run (7).png'),
+             pygame.image.load('images\Run_img\Run (8).png')]  # Right Walking Animations for id==0
+walkright1 = [pygame.image.load('images\Run_img\Run (1).png'),
+              pygame.image.load('images\Run_img\Run (2).png'),
+              pygame.image.load('images\Run_img\Run (3).png'),
+              pygame.image.load('images\Run_img\Run (4).png'),
+              pygame.image.load('images\Run_img\Run (5).png'),
+              pygame.image.load('images\Run_img\Run (6).png'),
+              pygame.image.load('images\Run_img\Run (7).png'),
+              pygame.image.load('images\Run_img\Run (8).png')]  # Right Walking Animations for id==1
 
-walkleft = [pygame.image.load('runss1.png'),
-            pygame.image.load('runss2.png'),
-            pygame.image.load('runss3.png'),
-            pygame.image.load('runss4.png'),
-            pygame.image.load('runss5.png'),
-            pygame.image.load('runss6.png'),
-            pygame.image.load('runss7.png'),
-            pygame.image.load('runss8.png')]  # Left Walking Animations for id==0
-walkleft1 = [pygame.image.load('runss1.png'),
-             pygame.image.load('runss2.png'),
-             pygame.image.load('runss3.png'),
-             pygame.image.load('runss4.png'),
-             pygame.image.load('runss5.png'),
-             pygame.image.load('runss6.png'),
-             pygame.image.load('runss7.png'),
-             pygame.image.load('runss8.png')]  # Left Walking Animations for id==1
+walkleft = [pygame.image.load(r'images\Run_left_img\runss1.png'),
+            pygame.image.load(r'images\Run_left_img\runss2.png'),
+            pygame.image.load(r'images\Run_left_img\runss3.png'),
+            pygame.image.load(r'images\Run_left_img\runss4.png'),
+            pygame.image.load(r'images\Run_left_img\runss5.png'),
+            pygame.image.load(r'images\Run_left_img\runss6.png'),
+            pygame.image.load(r'images\Run_left_img\runss7.png'),
+            pygame.image.load(r'images\Run_left_img\runss8.png')]  # Left Walking Animations for id==0
+walkleft1 = [pygame.image.load(r'images\Run_left_img\runss1.png'),
+             pygame.image.load(r'images\Run_left_img\runss2.png'),
+             pygame.image.load(r'images\Run_left_img\runss3.png'),
+             pygame.image.load(r'images\Run_left_img\runss4.png'),
+             pygame.image.load(r'images\Run_left_img\runss5.png'),
+             pygame.image.load(r'images\Run_left_img\runss6.png'),
+             pygame.image.load(r'images\Run_left_img\runss7.png'),
+             pygame.image.load(r'images\Run_left_img\runss8.png')]  # Left Walking Animations for id==1
 
-deadright = [pygame.image.load('Dead (1).png'),
-             pygame.image.load('Dead (2).png'),
-             pygame.image.load('Dead (3).png'),
-             pygame.image.load('Dead (4).png'),#right death animations 
-             pygame.image.load('Dead (5).png'),
-             pygame.image.load('Dead (6).png'),
-             pygame.image.load('Dead (7).png'),
-             pygame.image.load('Dead (8).png')
+deadright = [pygame.image.load('images\Dead_img\Dead (1).png'),
+             pygame.image.load('images\Dead_img\Dead (2).png'),
+             pygame.image.load('images\Dead_img\Dead (3).png'),
+             pygame.image.load('images\Dead_img\Dead (4).png'),  # right death animations
+             pygame.image.load('images\Dead_img\Dead (5).png'),
+             pygame.image.load('images\Dead_img\Dead (6).png'),
+             pygame.image.load('images\Dead_img\Dead (7).png'),
+             pygame.image.load('images\Dead_img\Dead (8).png')
              ]
-deadleft = [pygame.image.load('deadss1.png'),
-            pygame.image.load('deadss2.png'),
-            pygame.image.load('deadss3.png'),
-            pygame.image.load('deadss4.png'),
-            pygame.image.load('deadss5.png'),
-            pygame.image.load('deadss6.png'),#left death animations
-            pygame.image.load('deadss7.png'),
-            pygame.image.load('deadss8.png')
+deadleft = [pygame.image.load('images\Dead_left_img\deadss1.png'),
+            pygame.image.load('images\Dead_left_img\deadss2.png'),
+            pygame.image.load('images\Dead_left_img\deadss3.png'),
+            pygame.image.load('images\Dead_left_img\deadss4.png'),
+            pygame.image.load('images\Dead_left_img\deadss5.png'),
+            pygame.image.load('images\Dead_left_img\deadss6.png'),  # left death animations
+            pygame.image.load('images\Dead_left_img\deadss7.png'),
+            pygame.image.load('images\Dead_left_img\deadss8.png')
             ]
 
 # variables fo animation id==0
 walk = 0
-death=0
+death = 0
 left = False
 right = False
 jump = False
@@ -125,7 +124,7 @@ standr = True
 standl = False
 
 pygame.display.update()
-#fps declared
+# fps declared
 FPS = 32
 clock = pygame.time.Clock()
 
@@ -164,8 +163,10 @@ enemy_bullet_y = 645
 enemy_bullet_old = 1285
 enemy_bullet_change = 0
 
+# status (h-hit,d-drown,n-none of the above
 player_status = 'n'
 enemy_status = 'n'
+
 air = False  # player in air or not
 
 # initial for id==1
@@ -175,7 +176,7 @@ if net.id == '1':
     opponent_X = 32
     opponent_Y = 400
 
-# varibles for animation id==1
+# variables for animation id==1
 walk1 = 0
 left1 = False
 right1 = False
@@ -193,8 +194,10 @@ def message_to_screen(msg, color, y_displace=0, size="small"):  # function for d
 # to clear the text printed on the screen after 5 seconds
 """
 FUNCTION DESCRIPTION:
-Updates the scrren at every instant so that the game keeps on working without removng the necessary data from the screen
+Updates the screen at every instant so that the game keeps on working without removing the necessary data from the screen
 """
+
+
 def chat_screen_update():  # function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
@@ -204,15 +207,21 @@ def chat_screen_update():  # function for updating screen
     text = smallfont.render(chat_word + printchat, True, black)
     gameDisplay.blit(text, [20, 60])
     text_to_button(time_str, black, 623, 24, 30, 30)
-    health_bars(player_health, enemy_health)
-    player_draw(playerX, playerY, player_1)
-    player_draw(opponent_X, opponent_Y, player_1, True)
-    if enemy_bullet_change > 0:
+    health_bars(player_health, enemy_health)  # draw health bars
+    player_draw(playerX, playerY, player_1)  # draw player
+    player_draw(opponent_X, opponent_Y, player_1, True)  # draw enemy
+    if enemy_bullet_change > 0:  # bullet image according to direction
         gameDisplay.blit(bullet_right, (enemy_bullet_x, enemy_bullet_y))
     else:
         gameDisplay.blit(bullet_left, (enemy_bullet_x, enemy_bullet_y))
 
     # bande bhi yahan update honge taaki purana text overwrite ho jaaye
+
+
+"""
+FUNCTION DESCRIPTION:
+Creates text objects according to size specified
+"""
 
 
 def text_objects(msg, color, size="small"):  # for creating text objects
@@ -227,25 +236,34 @@ def text_objects(msg, color, size="small"):  # for creating text objects
     return textSurface, textSurface.get_rect()
 
 
+"""
+FUNCTION DESCRIPTION:
+Adds Text to buttons
+"""
+
+
 def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size="small"):  # adding text to buttons
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth // 2)), (buttony + (buttonheight // 2)))
     gameDisplay.blit(textSurf, textRect)
 
+
 """
 FUNCTION DESCRIPTION:
 Rules and regulations along with controls.
 """
+
+
 def helps():  # Controls/Help Screen
     helps = True
     while helps:
         gameDisplay.fill(green)
         message_to_screen("HELP", red, -100, "large")
         message_to_screen("SHOOT AND KILL THE ENEMY ", black, 0, "small")
-        message_to_screen("PRESS SPACEBAR TO SHOOT", black, 60, "small")
+        message_to_screen("PRESS SPACE BAR TO SHOOT", black, 60, "small")
         message_to_screen("HEALTH BARS CONSTANTLY KEEPS A CHECK ON YOUR HEALTH AS WELL AS YOUR ENEMY'S HEALTH", black,
                           120, "small")
-        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF YOUR KILLS TO ENEMY'S KILLS", black, 180,
+        message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF PLAYER 1 KILLS TO PLAYER 2 KILLS", black, 180,
                           "small")
         message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 240, "small")
         message_to_screen("PRESS PAUSE BUTTON TO PAUSE THE SCREEN", black, 280, "small")
@@ -278,10 +296,13 @@ def helps():  # Controls/Help Screen
 
         clock.tick(15)
 
+
 """
 FUNCTION DESCRIPTION:
 Creates Buttons.
 """
+
+
 def button(text, x, y, width, height, inactive_color, active_color, action=None):  # for adding functionality to button
     global pause
     cur = pygame.mouse.get_pos()
@@ -309,15 +330,18 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
     text_to_button(text, black, x, y, width, height)
 
+
 """
 FUNCTION DESCRIPTION:
 This function is called whenever chat button is pressed and displays the text as u type.
 """
+
+
 def chat_box():  # to create chat box
     chat_screen_update()
     pygame.display.update()
 
-    global chat_word,printchat
+    global chat_word, printchat
     printchat = ""
     current_string = []
     output = ""
@@ -353,10 +377,13 @@ def chat_box():  # to create chat box
     global chatStr
     chatStr = output
 
+
 """
 FUNCTION DESCRIPTION:
 Enables the chat to be displayed for 5 seconds.
 """
+
+
 def chatting():  # to chat
     global chatStr, printchat, printchatcheck, FPScount, chat_word
     reply = send_data(chatStr)
@@ -380,10 +407,13 @@ def chatting():  # to chat
         # # print("DONE")
         # chat_screen_update()
 
+
 """
 FUNCTION DESCRIPTION:
 Sends data to server via network file.
 """
+
+
 def send_data(output):  # to send/receive data/// output is chat string
     """
     Send position to server
@@ -420,6 +450,7 @@ def send_data(output):  # to send/receive data/// output is chat string
         player_bullet_y = int(arr[2][2:].split(',')[3])
         player_status = (arr[2][2:].split(',')[4])
 
+    # for direction of enemy and its bullet
     global opponent_Y_old, opponent_Y_change, opponent_X_old, opponent_X_change, enemy_bullet_change, enemy_bullet_old, chat_word
     opponent_X_change = opponent_X - opponent_X_old
     opponent_Y_change = opponent_Y - opponent_Y_old
@@ -427,22 +458,29 @@ def send_data(output):  # to send/receive data/// output is chat string
     opponent_Y_old = opponent_Y
     enemy_bullet_change = enemy_bullet_x - enemy_bullet_old
     enemy_bullet_old = enemy_bullet_x
+
     reply = arr[0]
 
     return reply[2:]
+
 
 """
 FUNCTION DESCRIPTION:
 to unpause the game
 """
+
+
 def unpause():  # to undo pause
     global pause
     pause = False
+
 
 """
 FUNCTION DESCRIPTION:
 to pause the game
 """
+
+
 def paused():  # pause screen
     textsurf, textrect = text_objects("PAUSED", red, "large")
     textrect.center = (630, 200)
@@ -468,10 +506,13 @@ def paused():  # pause screen
     else:
         chat_screen_update()
 
+
 """
 FUNCTION DESCRIPTION:
 Displays Game Over Screen.
 """
+
+
 def game_over():  # game over screen
     global player_death
     global player_kills
@@ -568,10 +609,13 @@ def game_over():  # game over screen
                 quit()
         clock.tick(10)
 
+
 """
 FUNCTION DESCRIPTION:
 Displays Game Intro Screen.
 """
+
+
 def game_intro():  # game intro screen
     intro = True
     while intro:
@@ -614,10 +658,13 @@ def game_intro():  # game intro screen
                 quit()
         clock.tick(10)
 
+
 """
 FUNCTION DESCRIPTION:
 Enables chat to be displayed while playing and not stopping the game.
 """
+
+
 def chatWithPlay():  # to chat while playing
     global chatStr, printchat, printchatcheck, FPScount, chat_word
 
@@ -628,21 +675,24 @@ def chatWithPlay():  # to chat while playing
         # print("DONE")
         chat_screen_update()
 
+
 """
 FUNCTION DESCRIPTION:
 Game Timer.
 """
+
+
 def timer(start_tick):  # timer control
-    global time_left,timer_count
-    if timer_count<2:
-        if time_left>119:
+    global time_left, timer_count
+    if timer_count < 2:
+        if time_left > 119:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
             gameDisplay.blit(textsurf, textrect)
             clock.tick(300)
     pygame.display.update()
-    print(time_left)
-    
+    # print(time_left)
+
     time_left = 120 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
@@ -662,10 +712,13 @@ def timer(start_tick):  # timer control
         # chat_screen_update()
     prev = time_str
 
+
 """
 FUNCTION DESCRIPTION:
 movement of the player with id=0 and id=1 respectively
 """
+
+
 def player_draw(player_x, player_y, image, mirror=False):  # to draw players and display scrores
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
@@ -675,7 +728,7 @@ def player_draw(player_x, player_y, image, mirror=False):  # to draw players and
         mirror = not mirror
     if mirror:
         image = pygame.transform.flip(image, True, False)
-    if net.id == '1':
+    if net.id == '1':  # display score
         text = font.render('Score  ' + str(player_death) + " : " + str(player_kills), 1, (0, 0, 0))
     else:
         text = font.render('Score  ' + str(player_kills) + " : " + str(player_death), 1, (0, 0, 0))
@@ -765,10 +818,13 @@ def player_draw(player_x, player_y, image, mirror=False):  # to draw players and
     # gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
+
 """
 FUNCTION DESCRIPTION:
-to check various obstacles
+To check whether player/bullet is trying to overlap with an obstacle
 """
+
+
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
                    player_width=28, player_height=60):  # to check an obstacle
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
@@ -809,6 +865,12 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                 change_y = 0
                 change_x = 0
     return change_x, change_y, air_stay, direction
+
+
+"""
+FUNCTION DESCRIPTION:
+Calls obstacle_check() for all obstacles/opponent
+"""
 
 
 def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=28,
@@ -906,10 +968,13 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
 
     return x_change, y_change, air_stay_count, direction
 
+
 """
 FUNCTION DESCRIPTION:
 to update the health meters showing indication of health with different colours
 """
+
+
 def health_bars(player_health, enemy_health):  # to display health bars
     if player_health > 75:
         player_health_color = gren
@@ -931,10 +996,12 @@ def health_bars(player_health, enemy_health):  # to display health bars
         pygame.draw.rect(gameDisplay, player_health_color, (750, 25, player_health, 30))
         pygame.draw.rect(gameDisplay, enemy_health_color, (430, 25, enemy_health, 30))
 
+
 """
 FUNCTION DESCRIPTION:
 to fire bullets
 """
+
 
 def fire(playerY, face, move_fire, direc):  # for firing
     global player_bullet_y
@@ -963,15 +1030,18 @@ def fire(playerY, face, move_fire, direc):  # for firing
 
     return fire_bullet, move_fire
 
+
 """
 FUNCTION DESCRIPTION:
 Main game function which calls all the other functions according to the requirement to make the game fucntional.
 """
+
+
 def gameLoop():  # main game
     global left, left1
     global right, right1
     global jump, jump1
-    global pause,death
+    global pause, death
     # to be able to modify direction
 
     # Event Handling
@@ -999,72 +1069,77 @@ def gameLoop():  # main game
         opponent_X = 32
         opponent_Y = 400
 
-    air_stay_count = 0
+    air_stay_count = 0  # variable for keeping player in air
     x_change = 0
     y_change = 0
-    face = "left"
+    face = "left"  # direction player is facing
 
-    move_fire = 1285  # firing
-    fire_y = 685
-    fire_bullet = False
+    # firing
+    move_fire = 1285  # bullet x coordinate
+    fire_y = 685  # bullet y coordinate
+    fire_bullet = False  # bullet is fired or not
     direc_fire = {"left": 0, "right": 0, "up": 0, "down": 0}
     direc_fire_const = direc_fire
     face_const = face
 
     global start_tick, player_status, enemy_status, air
     start_tick = pygame.time.get_ticks()
-    temp_air = False
+
+    temp_air = False  # temporary variable
+
     status_count = 0
     enemy_status_count = 0
+
     while not gameExit:
         # print(opponent_X_change)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 gameExit = True
         keys = pygame.key.get_pressed()  # movements
-        if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air == False:
-            jump = True
-            direction["up"] = 1
-            air_stay_count = 38
-            air = True
-        if keys[pygame.K_LEFT]:
-            if net.id != '1':
-                left = True
-                right = False
-                jump = False
-            elif net.id == '1':
-                left1 = True
-                right1 = False
-                jump1 = False
-            x_change = -4
-            face = "left"
-            direction["left"] = 1
-            direction["right"] = 0
-        if keys[pygame.K_RIGHT]:
-            if net.id != '1':
-                right = True
-                left = False
-                jump = False
-            elif net.id == '1':
-                right1 = True
-                left1 = False
-                jump1 = False
-            x_change = +4
-            face = "right"
-            direction["left"] = 0
-            direction["right"] = 1
-        if keys[pygame.K_SPACE] and fire_bullet == False and player_status == 'n':
-            move_fire = playerX
-            fire_y = playerY
-            fire_bullet = True
-            direc_fire_const = direc_fire
-            face_const = face
-            player_bullet_x = move_fire
-            player_bullet_y = playerY + 12
-        if keys[pygame.K_p]:
-            pygame.draw.rect(gameDisplay, red, (1180, 55, 90, 40))
-            pause = True
-            paused()
+        if timer_count == 2:  # movements only after both players connected
+            if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air == False:
+                jump = True
+                direction["up"] = 1
+                air_stay_count = 38
+                air = True
+            if keys[pygame.K_LEFT]:
+                if net.id != '1':
+                    left = True
+                    right = False
+                    jump = False
+                elif net.id == '1':
+                    left1 = True
+                    right1 = False
+                    jump1 = False
+                x_change = -4
+                face = "left"
+                direction["left"] = 1
+                direction["right"] = 0
+            if keys[pygame.K_RIGHT]:
+                if net.id != '1':
+                    right = True
+                    left = False
+                    jump = False
+                elif net.id == '1':
+                    right1 = True
+                    left1 = False
+                    jump1 = False
+                x_change = +4
+                face = "right"
+                direction["left"] = 0
+                direction["right"] = 1
+            if keys[pygame.K_SPACE] and fire_bullet == False and player_status == 'n':
+                move_fire = playerX
+                fire_y = playerY
+                fire_bullet = True
+                direc_fire_const = direc_fire
+                face_const = face
+                player_bullet_x = move_fire
+                player_bullet_y = playerY + 12
+            if keys[pygame.K_p]:
+                pygame.draw.rect(gameDisplay, red, (1180, 55, 90, 40))
+                pause = True
+                paused()
 
         button("Chat", 1180, 11, 90, 40, yellow, light_yellow, action="chat")
         button("PAUSE", 1180, 55, 90, 40, red, light_red, action="paused")
@@ -1086,12 +1161,14 @@ def gameLoop():  # main game
 
         chatting()
         chatWithPlay()
-        if player_status != 'n' and status_count != 1:
+
+        if player_status != 'n' and status_count != 1:  # change player status
             player_status = 'n'
             status_count = 0
         elif player_status != 'n' and status_count == 1:
             status_count += 1
-        if playerY + y_change >= 520:
+
+        if playerY + y_change >= 520:  # boundary conditions
             air_stay_count = 0
             y_change = 0
             playerY = 576
@@ -1112,11 +1189,12 @@ def gameLoop():  # main game
             x_change = 0
             playerX = 1280 - 32
 
-        if player_health != 0:
+        if player_health != 0:  # check obstacles for player
             x_change, y_change, air_stay_count, direction = obstacles(playerX, playerY, x_change, y_change,
                                                                       air_stay_count,
                                                                       direction)  # obstacles
-        playerX += x_change
+
+        playerX += x_change  # move player
         playerY += y_change
         x_change = 0
         y_change = 0
@@ -1126,7 +1204,7 @@ def gameLoop():  # main game
         direction["left"] = 0
 
         chat_screen_update()
-        if fire_bullet:
+        if fire_bullet:  # if bullet is fired
             if temp_air:
                 fire_bullet = False
                 player_bullet_x = 1285
@@ -1138,7 +1216,7 @@ def gameLoop():  # main game
             else:
                 fire_bullet, move_fire = fire(fire_y, face_const, move_fire, direc_fire_const)
                 player_bullet_x = move_fire
-                if face_const == "left":
+                if face_const == "left":  # check obstacles for bullet
                     player_1_2_x, player_1_2_y, temp_air, temp_dict = obstacle_check(player_bullet_x, player_bullet_y,
                                                                                      -16, 0, 0,
                                                                                      direc_fire_const, opponent_X,
@@ -1151,7 +1229,8 @@ def gameLoop():  # main game
         else:
             player_bullet_x = 1285
             player_bullet_y = 645
-        if enemy_status == 'd':
+
+        if enemy_status == 'd':  # changes according to enemy status
             if enemy_status_count == 0:
                 enemy_health = 0
                 enemy_status_count += 1
@@ -1161,29 +1240,30 @@ def gameLoop():  # main game
                 enemy_status_count += 1
         elif enemy_status == 'n':
             enemy_status_count = 0
+
         if enemy_health == 0:
-            if net.id=="0":
-                if right1==True:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
-                    death+=1
+            if net.id == "0":
+                if right1:
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadright[death // 4], [opponent_X, opponent_Y])
+                    death += 1
                 else:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
-                    death+=1
-            if net.id=="1":
-                if right==True:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
-                    death+=1
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadleft[death // 4], [opponent_X, opponent_Y])
+                    death += 1
+            if net.id == "1":
+                if right:
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadright[death // 4], [opponent_X, opponent_Y])
+                    death += 1
                 else:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
-                    death+=1
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadleft[death // 4], [opponent_X, opponent_Y])
+                    death += 1
             player_kills += 1
             enemy_death += 1
             enemy_health = 100
@@ -1193,29 +1273,30 @@ def gameLoop():  # main game
             else:
                 opponent_X = 1248
                 opponent_Y = 400
+
         if player_health == 0:
-            if net.id=="0":
-                if right==True:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
-                    death+=1
+            if net.id == "0":
+                if right:
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadright[death // 4], [playerX, playerY])
+                    death += 1
                 else:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
-                    death+=1
-            if net.id=="1":
-                if right1==True:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
-                    death+=1
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadleft[death // 4], [playerX, playerY])
+                    death += 1
+            if net.id == "1":
+                if right1:
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadright[death // 4], [playerX, playerY])
+                    death += 1
                 else:
-                    if death+1>=32:
-                        death=0
-                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
-                    death+=1
+                    if death + 1 >= 32:
+                        death = 0
+                    gameDisplay.blit(deadleft[death // 4], [playerX, playerY])
+                    death += 1
             player_death += 1
             enemy_kills += 1
             player_health = 100

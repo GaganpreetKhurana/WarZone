@@ -1,6 +1,6 @@
 import socket
 from _thread import *
-import sys
+
 import pygame
 
 pygame.init()
@@ -34,6 +34,8 @@ just_end = 0
 FUNCTION DESCRIPTION:
 Each client works on his own thread.This function takes care of recieving and sending back the required data. 
 """
+
+
 def threaded_client(conn):
     global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag, just_end
     conn.send(str.encode(currentId))
@@ -66,15 +68,15 @@ def threaded_client(conn):
                 flag = 1
             if str(flag) == '1':
                 time_left = 122 - (pygame.time.get_ticks() - start_time) / 1000
-                print(time_left)
+                # print(time_left)
                 if int(time_left) <= 0:
                     count = 0
                     oneStart = 0
                     zeroStart = 0
                     flag = 0
                     just_end = 1
-                    print("HELLO", count, oneStart, zeroStart, flag)
-            print("HELLO", count, oneStart, zeroStart, flag, just_end)
+                    # print("HELLO", count, oneStart, zeroStart, flag)
+            # print("HELLO", count, oneStart, zeroStart, flag, just_end)
 
             arr = reply.split('?')
             pos[id] = str(id) + ":" + arr[1]
