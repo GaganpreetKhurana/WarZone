@@ -240,7 +240,7 @@ def helps():  # Controls/Help Screen
         message_to_screen("SCORE ON TOP LEFT CORNER SIGNIFIES RATIO OF YOUR KILLS TO ENEMY'S KILLS", black, 180,
                           "small")
         message_to_screen("PRESS CHAT BUTTON TO SEND A MESSAGE ", black, 240, "small")
-        message_to_screen("PRESS PAUSE BUTTON TO PAUSE THE SCREEN",black,280,"small")
+        message_to_screen("PRESS PAUSE BUTTON TO PAUSE THE SCREEN", black, 280, "small")
 
         cur = pygame.mouse.get_pos()  # it returns tuple of position of mouse on screen
         click = pygame.mouse.get_pressed()  # it returns a tuple of which mouse button is pressed whether left ceter or right for eg (1,0,0) means left is pressed
@@ -601,8 +601,8 @@ def timer(start_tick):  # timer control
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
             gameDisplay.blit(textsurf, textrect)
-            clock.tick(300)        
-    pygame.display.update()           
+            clock.tick(300)
+    pygame.display.update()
     print(time_left)
     
     time_left = 120 - (pygame.time.get_ticks() - start_tick) / 1000
@@ -730,9 +730,9 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
         if obstacle_y <= player_y + change_y <= obstacle_y + height or obstacle_y <= player_y + player_height + change_y <= obstacle_y + height or player_y <= obstacle_y < player_y + player_height or player_y <= obstacle_y + height <= player_y + player_height:
             global air
-
-            if player_width == 24 and player_height == 24:
+            if player_width == 24 and player_height == 24:  # for fire
                 air_stay = True
+                return change_x, change_y, air_stay, direction
             if direction["right"] and direction["up"] == 0 and direction["down"] == 0:
                 change_x = obstacle_x - player_x - player_width
             elif direction["left"] and direction["up"] == 0 and direction["down"] == 0:
@@ -744,20 +744,26 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                     change_x = obstacle_x + width - player_x
             if direction["up"]:
                 if obstacle_y < player_y + change_y < obstacle_y + height:
-                    change_y = +8
-                    change_x = 0
+                    change_y = + 8
                     direction["up"] = 0
                     direction["down"] = 1
                     air_stay = 32 - air_stay - 2
+                if air_stay != 0:
+                    change_x = 0
             elif direction["down"]:
-                if obstacle_y < player_y + player_height + change_y < obstacle_y + height:
+                if obstacle_y < player_y + player_height + change_y < obstacle_y + height or obstacle_y < player_y + change_y < obstacle_y + height:
                     change_y = obstacle_y - player_y - player_height
+                    if change_y < 0:
+                        change_y = +16
                     direction["up"] = 0
                     direction["down"] = 0
                     air_stay = 0
                     air = False
                 if air_stay != 0:
                     change_x = 0
+            if width == player_width and height == player_height and obstacle_x == opponent_X and obstacle_y == opponent_Y:
+                change_y = 0
+                change_x = 0
     return change_x, change_y, air_stay, direction
 
 
@@ -788,11 +794,11 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
                                                                    direction, 256, 320, 128, 64, player_width,
                                                                    player_height)
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 192, 128, 32, player_width,
+                                                                   direction, 0, 224, 96, 64, player_width,
                                                                    player_height)  # plank 1
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
-                                                                   direction, 0, 224, 96, 64, player_width,
-                                                                   player_height)
+                                                                   direction, 0, 192, 128, 32, player_width,
+                                                                   player_height)  # plank 1
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 0, 288, 64, 32, player_width,
                                                                    player_height)
@@ -847,6 +853,12 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 1248, 320, 32, 32, player_width,
                                                                    player_height)
+    if player_height != 24 and player_height != player_width:
+        x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change,
+                                                                       air_stay_count,
+                                                                       direction, opponent_X, opponent_Y, 28, 60,
+                                                                       player_width,
+                                                                       player_height)  # OPPONENT
 
     return x_change, y_change, air_stay_count, direction
 
@@ -959,7 +971,7 @@ def gameLoop():  # main game
         if keys[pygame.K_UP] and air_stay_count == 0 and direction["down"] == 0 and air == False:
             jump = True
             direction["up"] = 1
-            air_stay_count = 32
+            air_stay_count = 38
             air = True
         if keys[pygame.K_LEFT]:
             if net.id != '1':
@@ -987,7 +999,7 @@ def gameLoop():  # main game
             face = "right"
             direction["left"] = 0
             direction["right"] = 1
-        if keys[pygame.K_SPACE] and fire_bullet == False:
+        if keys[pygame.K_SPACE] and fire_bullet == False and player_status == 'n':
             move_fire = playerX
             fire_y = playerY
             fire_bullet = True
@@ -1007,12 +1019,12 @@ def gameLoop():  # main game
             start_tick = pygame.time.get_ticks()
         timer(start_tick)
 
-        if air_stay_count > 16:  # for staying in air/loop
+        if air_stay_count > 19:  # for staying in air/loop
             air_stay_count -= 1
             y_change = -8
             direction["up"] = 1
             direction["down"] = 0
-        elif air_stay_count <= 16:
+        elif air_stay_count <= 19:
             air_stay_count -= 1
             y_change = +8
             direction["down"] = 1

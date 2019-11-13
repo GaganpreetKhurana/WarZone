@@ -15,11 +15,6 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="33" />
-    <option name="width" value="1346" />
-    <option name="height" value="688" />
-  </component>
   <component name="ProjectId" id="1TIUQB5ddbuDqWMS9jiC5PU2JHU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
@@ -40,7 +35,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Warzone2">
+  <component name="RunManager" selected="Python.Server">
     <configuration name="Server" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="WarZone" />
       <option name="INTERPRETER_OPTIONS" value="" />
