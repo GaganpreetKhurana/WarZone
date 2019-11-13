@@ -99,7 +99,7 @@ walkleft1 = [pygame.image.load('runss1.png'),
 deadright = [pygame.image.load('Dead (1).png'),
              pygame.image.load('Dead (2).png'),
              pygame.image.load('Dead (3).png'),
-             pygame.image.load('Dead (4).png'),
+             pygame.image.load('Dead (4).png'),#right death animations 
              pygame.image.load('Dead (5).png'),
              pygame.image.load('Dead (6).png'),
              pygame.image.load('Dead (7).png'),
@@ -110,7 +110,7 @@ deadleft = [pygame.image.load('deadss1.png'),
             pygame.image.load('deadss3.png'),
             pygame.image.load('deadss4.png'),
             pygame.image.load('deadss5.png'),
-            pygame.image.load('deadss6.png'),
+            pygame.image.load('deadss6.png'),#left death animations
             pygame.image.load('deadss7.png'),
             pygame.image.load('deadss8.png')
             ]
@@ -125,7 +125,7 @@ standr = True
 standl = False
 
 pygame.display.update()
-
+#fps declared
 FPS = 32
 clock = pygame.time.Clock()
 
@@ -431,12 +431,18 @@ def send_data(output):  # to send/receive data/// output is chat string
 
     return reply[2:]
 
-
+"""
+FUNCTION DESCRIPTION:
+to unpause the game
+"""
 def unpause():  # to undo pause
     global pause
     pause = False
 
-
+"""
+FUNCTION DESCRIPTION:
+to pause the game
+"""
 def paused():  # pause screen
     textsurf, textrect = text_objects("PAUSED", red, "large")
     textrect.center = (630, 200)
@@ -656,7 +662,10 @@ def timer(start_tick):  # timer control
         # chat_screen_update()
     prev = time_str
 
-
+"""
+FUNCTION DESCRIPTION:
+movement of the player with id=0 and id=1 respectively
+"""
 def player_draw(player_x, player_y, image, mirror=False):  # to draw players and display scrores
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
@@ -756,7 +765,10 @@ def player_draw(player_x, player_y, image, mirror=False):  # to draw players and
     # gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
-
+"""
+FUNCTION DESCRIPTION:
+to check various obstacles
+"""
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
                    player_width=28, player_height=60):  # to check an obstacle
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
@@ -894,7 +906,10 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
 
     return x_change, y_change, air_stay_count, direction
 
-
+"""
+FUNCTION DESCRIPTION:
+to update the health meters showing indication of health with different colours
+"""
 def health_bars(player_health, enemy_health):  # to display health bars
     if player_health > 75:
         player_health_color = gren
@@ -916,6 +931,10 @@ def health_bars(player_health, enemy_health):  # to display health bars
         pygame.draw.rect(gameDisplay, player_health_color, (750, 25, player_health, 30))
         pygame.draw.rect(gameDisplay, enemy_health_color, (430, 25, enemy_health, 30))
 
+"""
+FUNCTION DESCRIPTION:
+to fire bullets
+"""
 
 def fire(playerY, face, move_fire, direc):  # for firing
     global player_bullet_y

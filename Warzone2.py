@@ -99,7 +99,7 @@ walkleft1 = [pygame.image.load('runss1.png'),
 deadright = [pygame.image.load('Dead (1).png'),
              pygame.image.load('Dead (2).png'),
              pygame.image.load('Dead (3).png'),
-             pygame.image.load('Dead (4).png'),
+             pygame.image.load('Dead (4).png'),#right death animations 
              pygame.image.load('Dead (5).png'),
              pygame.image.load('Dead (6).png'),
              pygame.image.load('Dead (7).png'),
@@ -110,14 +110,14 @@ deadleft = [pygame.image.load('deadss1.png'),
             pygame.image.load('deadss3.png'),
             pygame.image.load('deadss4.png'),
             pygame.image.load('deadss5.png'),
-            pygame.image.load('deadss6.png'),
+            pygame.image.load('deadss6.png'),#left death animations
             pygame.image.load('deadss7.png'),
             pygame.image.load('deadss8.png')
             ]
 
 # variables fo animation id==0
 walk = 0
-death = 0
+death=0
 left = False
 right = False
 jump = False
@@ -125,7 +125,7 @@ standr = True
 standl = False
 
 pygame.display.update()
-
+#fps declared
 FPS = 32
 clock = pygame.time.Clock()
 
@@ -195,8 +195,6 @@ def message_to_screen(msg, color, y_displace=0, size="small"):  # function for d
 FUNCTION DESCRIPTION:
 Updates the scrren at every instant so that the game keeps on working without removng the necessary data from the screen
 """
-
-
 def chat_screen_update():  # function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
@@ -234,13 +232,10 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
     textRect.center = ((buttonx + (buttonwidth // 2)), (buttony + (buttonheight // 2)))
     gameDisplay.blit(textSurf, textRect)
 
-
 """
 FUNCTION DESCRIPTION:
 Rules and regulations along with controls.
 """
-
-
 def helps():  # Controls/Help Screen
     helps = True
     while helps:
@@ -283,13 +278,10 @@ def helps():  # Controls/Help Screen
 
         clock.tick(15)
 
-
 """
 FUNCTION DESCRIPTION:
 Creates Buttons.
 """
-
-
 def button(text, x, y, width, height, inactive_color, active_color, action=None):  # for adding functionality to button
     global pause
     cur = pygame.mouse.get_pos()
@@ -317,18 +309,15 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
 
     text_to_button(text, black, x, y, width, height)
 
-
 """
 FUNCTION DESCRIPTION:
 This function is called whenever chat button is pressed and displays the text as u type.
 """
-
-
 def chat_box():  # to create chat box
     chat_screen_update()
     pygame.display.update()
 
-    global chat_word, printchat
+    global chat_word,printchat
     printchat = ""
     current_string = []
     output = ""
@@ -364,13 +353,10 @@ def chat_box():  # to create chat box
     global chatStr
     chatStr = output
 
-
 """
 FUNCTION DESCRIPTION:
 Enables the chat to be displayed for 5 seconds.
 """
-
-
 def chatting():  # to chat
     global chatStr, printchat, printchatcheck, FPScount, chat_word
     reply = send_data(chatStr)
@@ -394,13 +380,10 @@ def chatting():  # to chat
         # # print("DONE")
         # chat_screen_update()
 
-
 """
 FUNCTION DESCRIPTION:
 Sends data to server via network file.
 """
-
-
 def send_data(output):  # to send/receive data/// output is chat string
     """
     Send position to server
@@ -448,12 +431,18 @@ def send_data(output):  # to send/receive data/// output is chat string
 
     return reply[2:]
 
-
+"""
+FUNCTION DESCRIPTION:
+to unpause the game
+"""
 def unpause():  # to undo pause
     global pause
     pause = False
 
-
+"""
+FUNCTION DESCRIPTION:
+to pause the game
+"""
 def paused():  # pause screen
     textsurf, textrect = text_objects("PAUSED", red, "large")
     textrect.center = (630, 200)
@@ -479,13 +468,10 @@ def paused():  # pause screen
     else:
         chat_screen_update()
 
-
 """
 FUNCTION DESCRIPTION:
 Displays Game Over Screen.
 """
-
-
 def game_over():  # game over screen
     global player_death
     global player_kills
@@ -582,13 +568,10 @@ def game_over():  # game over screen
                 quit()
         clock.tick(10)
 
-
 """
 FUNCTION DESCRIPTION:
 Displays Game Intro Screen.
 """
-
-
 def game_intro():  # game intro screen
     intro = True
     while intro:
@@ -631,13 +614,10 @@ def game_intro():  # game intro screen
                 quit()
         clock.tick(10)
 
-
 """
 FUNCTION DESCRIPTION:
 Enables chat to be displayed while playing and not stopping the game.
 """
-
-
 def chatWithPlay():  # to chat while playing
     global chatStr, printchat, printchatcheck, FPScount, chat_word
 
@@ -648,24 +628,21 @@ def chatWithPlay():  # to chat while playing
         # print("DONE")
         chat_screen_update()
 
-
 """
 FUNCTION DESCRIPTION:
 Game Timer.
 """
-
-
 def timer(start_tick):  # timer control
-    global time_left, timer_count
-    if timer_count < 2:
-        if time_left > 119:
+    global time_left,timer_count
+    if timer_count<2:
+        if time_left>119:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
             gameDisplay.blit(textsurf, textrect)
             clock.tick(300)
     pygame.display.update()
     print(time_left)
-
+    
     time_left = 120 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
@@ -685,7 +662,10 @@ def timer(start_tick):  # timer control
         # chat_screen_update()
     prev = time_str
 
-
+"""
+FUNCTION DESCRIPTION:
+movement of the player with id=0 and id=1 respectively
+"""
 def player_draw(player_x, player_y, image, mirror=False):  # to draw players and display scrores
     # pygame.draw.rect(gameDisplay, red, (player_x, player_y + 32, 32, 32))
     # pygame.draw.rect(gameDisplay, black, (player_x, player_y, 32, 16))
@@ -785,7 +765,10 @@ def player_draw(player_x, player_y, image, mirror=False):  # to draw players and
     # gameDisplay.blit(image, [player_x - 16, player_y])
     # chat_screen_update()
 
-
+"""
+FUNCTION DESCRIPTION:
+to check various obstacles
+"""
 def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, obstacle_x, obstacle_y, width, height,
                    player_width=28, player_height=60):  # to check an obstacle
     if obstacle_x <= player_x + change_x <= obstacle_x + width or obstacle_x <= player_x + player_width + change_x <= obstacle_x + width:
@@ -923,7 +906,10 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
 
     return x_change, y_change, air_stay_count, direction
 
-
+"""
+FUNCTION DESCRIPTION:
+to update the health meters showing indication of health with different colours
+"""
 def health_bars(player_health, enemy_health):  # to display health bars
     if player_health > 75:
         player_health_color = gren
@@ -945,6 +931,10 @@ def health_bars(player_health, enemy_health):  # to display health bars
         pygame.draw.rect(gameDisplay, player_health_color, (750, 25, player_health, 30))
         pygame.draw.rect(gameDisplay, enemy_health_color, (430, 25, enemy_health, 30))
 
+"""
+FUNCTION DESCRIPTION:
+to fire bullets
+"""
 
 def fire(playerY, face, move_fire, direc):  # for firing
     global player_bullet_y
@@ -973,18 +963,15 @@ def fire(playerY, face, move_fire, direc):  # for firing
 
     return fire_bullet, move_fire
 
-
 """
 FUNCTION DESCRIPTION:
 Main game function which calls all the other functions according to the requirement to make the game fucntional.
 """
-
-
 def gameLoop():  # main game
     global left, left1
     global right, right1
     global jump, jump1
-    global pause, death
+    global pause,death
     # to be able to modify direction
 
     # Event Handling
@@ -1175,28 +1162,28 @@ def gameLoop():  # main game
         elif enemy_status == 'n':
             enemy_status_count = 0
         if enemy_health == 0:
-            if net.id == "0":
-                if right1 == True:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadright[death // 4], [opponent_X, opponent_Y])
-                    death += 1
+            if net.id=="0":
+                if right1==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
+                    death+=1
                 else:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadleft[death // 4], [opponent_X, opponent_Y])
-                    death += 1
-            if net.id == "1":
-                if right == True:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadright[death // 4], [opponent_X, opponent_Y])
-                    death += 1
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
+                    death+=1
+            if net.id=="1":
+                if right==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
+                    death+=1
                 else:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadleft[death // 4], [opponent_X, opponent_Y])
-                    death += 1
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
+                    death+=1
             player_kills += 1
             enemy_death += 1
             enemy_health = 100
@@ -1207,28 +1194,28 @@ def gameLoop():  # main game
                 opponent_X = 1248
                 opponent_Y = 400
         if player_health == 0:
-            if net.id == "0":
-                if right == True:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadright[death // 4], [playerX, playerY])
-                    death += 1
+            if net.id=="0":
+                if right==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
+                    death+=1
                 else:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadleft[death // 4], [playerX, playerY])
-                    death += 1
-            if net.id == "1":
-                if right1 == True:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadright[death // 4], [playerX, playerY])
-                    death += 1
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
+                    death+=1
+            if net.id=="1":
+                if right1==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
+                    death+=1
                 else:
-                    if death + 1 >= 32:
-                        death = 0
-                    gameDisplay.blit(deadleft[death // 4], [playerX, playerY])
-                    death += 1
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
+                    death+=1
             player_death += 1
             enemy_kills += 1
             player_health = 100
