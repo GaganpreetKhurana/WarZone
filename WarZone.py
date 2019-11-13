@@ -575,6 +575,15 @@ def chatWithPlay():  # to chat while playing
 
 def timer(start_tick):  # timer control
     global time_left
+    if net.id=="0":
+        if time_left>59:
+            textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
+            textrect.center = (630, 150)
+            gameDisplay.blit(textsurf, textrect)
+            clock.tick(300)        
+    pygame.display.update()           
+    print(time_left)
+    
     time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
