@@ -143,6 +143,7 @@ time_str = ""
 prev = ""
 start_tick = 0
 timer_count = 0
+timer_flag = 0
 
 # initial values for variables
 player_health = 100
@@ -595,8 +596,8 @@ def chatWithPlay():  # to chat while playing
 
 
 def timer(start_tick):  # timer control
-    global time_left
-    if net.id=="0" or net.id=="1":
+    global time_left,timer_count
+    if timer_count<2:
         if time_left>119:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
