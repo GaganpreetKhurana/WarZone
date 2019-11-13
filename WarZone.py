@@ -304,8 +304,8 @@ def chat_box():  # to create chat box
     chat_screen_update()
     pygame.display.update()
 
-    global chat_word
-
+    global chat_word,printchat
+    printchat = ""
     current_string = []
     output = ""
     writing = True
