@@ -3,6 +3,10 @@ import socket
 
 class network:
 
+    """
+    FUNCTION DESCRIPTION:
+    Initialises the client. Add the host ipv4 address.
+    """
     def __init__(self):
         self.host = socket.gethostbyname(socket.gethostname())  # For this to work on your machine this must be equal to the ipv4 address of the machine running the server
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -12,10 +16,18 @@ class network:
         self.addr = (self.host, self.port)
         self.id = self.connect()
 
+    """
+    FUNCTION DESCRIPTION:
+    Client Connects to the server.
+    """
     def connect(self):
         self.client.connect(self.addr)
         return self.client.recv(2048).decode()
 
+    """
+    FUNCTION DESCRIPTION:
+    Sends the required data to the server.
+    """
     def send(self, data):
         """
         :param data: str

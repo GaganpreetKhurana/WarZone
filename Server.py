@@ -30,7 +30,10 @@ start_time = 0
 flag = 0
 just_end = 0
 
-
+"""
+FUNCTION DESCRIPTION:
+Each client works on his own thread.This function takes care of recieving and sending back the required data. 
+"""
 def threaded_client(conn):
     global currentId, pos, chat, count, zeroStart, oneStart, start_time, flag, just_end
     conn.send(str.encode(currentId))

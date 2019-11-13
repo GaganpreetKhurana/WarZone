@@ -191,6 +191,12 @@ def message_to_screen(msg, color, y_displace=0, size="small"):  # function for d
 
 
 # to clear the text printed on the screen after 5 seconds
+"""
+FUNCTION DESCRIPTION:
+Updates the scrren at every instant so that the game keeps on working without removng the necessary data from the screen
+"""
+
+
 def chat_screen_update():  # function for updating screen
     gameDisplay.fill(white)
     gameDisplay.blit(background_clouds, [0, 0])
@@ -227,6 +233,12 @@ def text_to_button(msg, color, buttonx, buttony, buttonwidth, buttonheight, size
     textSurf, textRect = text_objects(msg, color, size)
     textRect.center = ((buttonx + (buttonwidth // 2)), (buttony + (buttonheight // 2)))
     gameDisplay.blit(textSurf, textRect)
+
+
+"""
+FUNCTION DESCRIPTION:
+Rules and regulations along with controls.
+"""
 
 
 def helps():  # Controls/Help Screen
@@ -272,6 +284,12 @@ def helps():  # Controls/Help Screen
         clock.tick(15)
 
 
+"""
+FUNCTION DESCRIPTION:
+Creates Buttons.
+"""
+
+
 def button(text, x, y, width, height, inactive_color, active_color, action=None):  # for adding functionality to button
     global pause
     cur = pygame.mouse.get_pos()
@@ -298,6 +316,12 @@ def button(text, x, y, width, height, inactive_color, active_color, action=None)
         pygame.draw.rect(gameDisplay, inactive_color, (x, y, width, height))
 
     text_to_button(text, black, x, y, width, height)
+
+
+"""
+FUNCTION DESCRIPTION:
+This function is called whenever chat button is pressed and displays the text as u type.
+"""
 
 
 def chat_box():  # to create chat box
@@ -341,6 +365,12 @@ def chat_box():  # to create chat box
     chatStr = output
 
 
+"""
+FUNCTION DESCRIPTION:
+Enables the chat to be displayed for 5 seconds.
+"""
+
+
 def chatting():  # to chat
     global chatStr, printchat, printchatcheck, FPScount, chat_word
     reply = send_data(chatStr)
@@ -363,6 +393,12 @@ def chatting():  # to chat
         # printchat = ""
         # # print("DONE")
         # chat_screen_update()
+
+
+"""
+FUNCTION DESCRIPTION:
+Sends data to server via network file.
+"""
 
 
 def send_data(output):  # to send/receive data/// output is chat string
@@ -442,6 +478,12 @@ def paused():  # pause screen
         clock.tick(15)
     else:
         chat_screen_update()
+
+
+"""
+FUNCTION DESCRIPTION:
+Displays Game Over Screen.
+"""
 
 
 def game_over():  # game over screen
@@ -541,6 +583,12 @@ def game_over():  # game over screen
         clock.tick(10)
 
 
+"""
+FUNCTION DESCRIPTION:
+Displays Game Intro Screen.
+"""
+
+
 def game_intro():  # game intro screen
     intro = True
     while intro:
@@ -584,6 +632,12 @@ def game_intro():  # game intro screen
         clock.tick(10)
 
 
+"""
+FUNCTION DESCRIPTION:
+Enables chat to be displayed while playing and not stopping the game.
+"""
+
+
 def chatWithPlay():  # to chat while playing
     global chatStr, printchat, printchatcheck, FPScount, chat_word
 
@@ -593,6 +647,12 @@ def chatWithPlay():  # to chat while playing
         chat_word = ""
         # print("DONE")
         chat_screen_update()
+
+
+"""
+FUNCTION DESCRIPTION:
+Game Timer.
+"""
 
 
 def timer(start_tick):  # timer control
@@ -912,6 +972,12 @@ def fire(playerY, face, move_fire, direc):  # for firing
     # pygame.draw.circle(gameDisplay,light_green,(move_fire,player_bullet_y),12)
 
     return fire_bullet, move_fire
+
+
+"""
+FUNCTION DESCRIPTION:
+Main game function which calls all the other functions according to the requirement to make the game fucntional.
+"""
 
 
 def gameLoop():  # main game
