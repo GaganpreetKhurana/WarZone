@@ -96,8 +96,28 @@ walkleft1 = [pygame.image.load('runss1.png'),
              pygame.image.load('runss7.png'),
              pygame.image.load('runss8.png')]  # Left Walking Animations for id==1
 
+deadright = [pygame.image.load('Dead (1).png'),
+             pygame.image.load('Dead (2).png'),
+             pygame.image.load('Dead (3).png'),
+             pygame.image.load('Dead (4).png'),
+             pygame.image.load('Dead (5).png'),
+             pygame.image.load('Dead (6).png'),
+             pygame.image.load('Dead (7).png'),
+             pygame.image.load('Dead (8).png')
+             ]
+deadleft = [pygame.image.load('deadss1.png'),
+            pygame.image.load('deadss2.png'),
+            pygame.image.load('deadss3.png'),
+            pygame.image.load('deadss4.png'),
+            pygame.image.load('deadss5.png'),
+            pygame.image.load('deadss6.png'),
+            pygame.image.load('deadss7.png'),
+            pygame.image.load('deadss8.png')
+            ]
+
 # variables fo animation id==0
 walk = 0
+death=0
 left = False
 right = False
 jump = False
@@ -577,7 +597,7 @@ def chatWithPlay():  # to chat while playing
 def timer(start_tick):  # timer control
     global time_left
     if net.id=="0" or net.id=="1":
-        if time_left>59:
+        if time_left>119:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
             gameDisplay.blit(textsurf, textrect)
@@ -585,7 +605,7 @@ def timer(start_tick):  # timer control
     pygame.display.update()           
     print(time_left)
     
-    time_left = 60 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 120 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")
@@ -885,7 +905,7 @@ def gameLoop():  # main game
     global left, left1
     global right, right1
     global jump, jump1
-    global pause
+    global pause,death
     # to be able to modify direction
 
     # Event Handling
@@ -1076,6 +1096,28 @@ def gameLoop():  # main game
         elif enemy_status == 'n':
             enemy_status_count = 0
         if enemy_health == 0:
+            if net.id=="0":
+                if right1==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
+                    death+=1
+                else:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
+                    death+=1
+            if net.id=="1":
+                if right==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[opponent_X,opponent_Y])
+                    death+=1
+                else:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[opponent_X,opponent_Y])
+                    death+=1
             player_kills += 1
             enemy_death += 1
             enemy_health = 100
@@ -1086,6 +1128,28 @@ def gameLoop():  # main game
                 opponent_X = 1248
                 opponent_Y = 400
         if player_health == 0:
+            if net.id=="0":
+                if right==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
+                    death+=1
+                else:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
+                    death+=1
+            if net.id=="1":
+                if right1==True:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadright[death//4],[playerX,playerY])
+                    death+=1
+                else:
+                    if death+1>=32:
+                        death=0
+                    gameDisplay.blit(deadleft[death//4],[playerX,playerY])
+                    death+=1
             player_death += 1
             enemy_kills += 1
             player_health = 100
