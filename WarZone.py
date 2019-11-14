@@ -520,6 +520,11 @@ def game_over():  # game over screen
     global enemy_kills
     global timer_count
 
+    pygame.mixer.music.stop()
+    #pygame.mixer.music.unload()
+    pygame.mixer.music.load("Music\GameOver.wav")
+    pygame.mixer.music.play(-1)
+
     global chatStr, printchat, printchatcheck, FPScount, chat_word
     chatStr = ""
     printchat = ""
@@ -618,6 +623,10 @@ Displays Game Intro Screen.
 
 def game_intro():  # game intro screen
     intro = True
+
+    pygame.mixer.music.load("Music\GameStart.wav")
+    pygame.mixer.music.play(-1)
+
     while intro:
 
         gameDisplay.fill(white)
@@ -1043,6 +1052,11 @@ def gameLoop():  # main game
     global jump, jump1
     global pause, death
     # to be able to modify direction
+
+    pygame.mixer.music.stop()
+    #pygame.mixer.music.unload()
+    pygame.mixer.music.load("Music\Music1.wav")
+    pygame.mixer.music.play(-1)
 
     # Event Handling
     gameDisplay.fill(white)
