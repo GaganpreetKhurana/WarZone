@@ -521,7 +521,7 @@ def game_over():  # game over screen
     global timer_count
 
     pygame.mixer.music.stop()
-    #pygame.mixer.music.unload()
+    # pygame.mixer.music.unload()
     pygame.mixer.music.load("Music\GameOver.wav")
     pygame.mixer.music.play(-1)
 
@@ -694,7 +694,7 @@ Game Timer.
 def timer(start_tick):  # timer control
     global time_left, timer_count
     if timer_count < 2:
-        if time_left > 119:
+        if time_left > 300:
             textsurf, textrect = text_objects("WAITING  FOR OTHER PLAYERS TO JOIN......", red, "small")
             textrect.center = (630, 150)
             gameDisplay.blit(textsurf, textrect)
@@ -702,7 +702,7 @@ def timer(start_tick):  # timer control
     pygame.display.update()
     # print(time_left)
 
-    time_left = 120 - (pygame.time.get_ticks() - start_tick) / 1000
+    time_left = 301 - (pygame.time.get_ticks() - start_tick) / 1000
     min, sec = divmod(time_left, 60)
     if int(min) == int(0) and int(sec) == int(0):
         # print("helllllo")
@@ -870,9 +870,12 @@ def obstacle_check(player_x, player_y, change_x, change_y, air_stay, direction, 
                     air = False
                 if air_stay != 0:
                     change_x = 0
-            if width == player_width and height == player_height and obstacle_x == opponent_X and obstacle_y == opponent_Y:
-                change_y = 0
-                change_x = 0
+            # if width == player_width and height == player_height and obstacle_x == opponent_X and obstacle_y == opponent_Y:
+            #     change_y = 0
+            #     if net.id=='1':
+            #         change_x=4
+            #     else:
+            #         change_x=-4
     return change_x, change_y, air_stay, direction
 
 
@@ -884,6 +887,12 @@ Calls obstacle_check() for all obstacles/opponent
 
 def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, player_width=28,
               player_height=60):  # to check all obstacles
+    # if player_height != 24 and player_height != player_width:
+    #     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change,
+    #                                                                    air_stay_count,
+    #                                                                    direction, opponent_X, opponent_Y, 28, 60,
+    #                                                                    player_width,
+    #                                                                    player_height)  # OPPONENT
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 128, 352, 32, 32, player_width,
                                                                    player_height)  # plank 2
@@ -968,12 +977,6 @@ def obstacles(playerX, playerY, x_change, y_change, air_stay_count, direction, p
     x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change, air_stay_count,
                                                                    direction, 1248, 320, 32, 32, player_width,
                                                                    player_height)
-    if player_height != 24 and player_height != player_width:
-        x_change, y_change, air_stay_count, direction = obstacle_check(playerX, playerY, x_change, y_change,
-                                                                       air_stay_count,
-                                                                       direction, opponent_X, opponent_Y, 28, 60,
-                                                                       player_width,
-                                                                       player_height)  # OPPONENT
 
     return x_change, y_change, air_stay_count, direction
 
@@ -1054,7 +1057,7 @@ def gameLoop():  # main game
     # to be able to modify direction
 
     pygame.mixer.music.stop()
-    #pygame.mixer.music.unload()
+    # pygame.mixer.music.unload()
     pygame.mixer.music.load("Music\Music1.wav")
     pygame.mixer.music.play(-1)
 
