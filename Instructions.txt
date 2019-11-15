@@ -10,3 +10,5 @@ Enter in this format
 self.host='172.31.71.138'
 
 3->Players will run Warzone.py file
+
+NOTE:Warzone and Warzone2 are exactly same.You can run any of the file
