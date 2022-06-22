@@ -24,7 +24,7 @@ matplotlib==3.1.2
 mysql-connector==2.2.9
 mysql-connector-python==8.0.18
 networkx==2.4
-numpy==1.17.3
+numpy==1.22.0
 opencv-contrib-python==4.2.0.32
 pandas==0.25.2
 parso==0.5.2
